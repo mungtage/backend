@@ -69,9 +69,17 @@ jobs:
           docker rm mungtage
           docker rmi ${{ secrets.DOCKER_HUB_REPO }}:1.0
           docker pull ${{ secrets.DOCKER_HUB_REPO }}:1.0
-          docker run --name=mungtage -p 80:8080 -e JAVA_OPTS=-Djasypt.encryptor.password=${{ secrets.ENCRYTOR_PASSWORD }} --restart unless-stopped -e TZ=Asia/Seoul -d ${{ secrets.DOCKER_HUB_REPO }}:1.0
-          
+          docker run --name=mungtage -p 8080:8080 -e JAVA_OPTS=-Djasypt.encryptor.password=${{ secrets.ENCRYTOR_PASSWORD }} --restart unless-stopped -e TZ=Asia/Seoul -d ${{ secrets.DOCKER_HUB_REPO }}:1.0
+
+    - name: Send status to Discord
+        uses: nebularg/actions-discord-webhook@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }
+          status: ${{ job.status }}
+        if: always()
+
     - name: Discord notification
+      if: success()
       env:
        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       uses: Ilshidur/action-discord@master
