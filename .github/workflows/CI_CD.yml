@@ -50,10 +50,10 @@ jobs:
           
     - name: Docker build & push
       run: |
-           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-           docker build -f Dockerfile -t ${{ secrets.DOCKER_HUB_REPO }} .
-           docker tag ${{ secrets.DOCKER_HUB_REPO }} ${{ secrets.DOCKER_HUB_REPO }}:1.0
-           docker push ${{ secrets.DOCKER_HUB_REPO }}:1.0
+         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+         docker build -f Dockerfile -t ${{ secrets.DOCKER_HUB_REPO }} .
+         docker tag ${{ secrets.DOCKER_HUB_REPO }} ${{ secrets.DOCKER_HUB_REPO }}:1.0
+         docker push ${{ secrets.DOCKER_HUB_REPO }}:1.0
            
     - name: Discord notification
       env:
