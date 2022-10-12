@@ -1,6 +1,7 @@
 package com.example.mungtage.domain.Lost.model;
 
 import com.example.mungtage.domain.User.model.User;
+import com.example.mungtage.util.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,10 +20,10 @@ import java.time.LocalDateTime;
 @Table(name = "lost")
 @SQLDelete(sql = "UPDATE lost SET deleted = true where id = ?")
 @Where(clause = "deleted = false")
-public class Lost {
+public class Lost extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String animalName;
@@ -40,12 +41,6 @@ public class Lost {
 
     @Column(columnDefinition = "boolean default false")
     private Boolean isMatched;
-
-    @CreationTimestamp()
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp()
-    private LocalDateTime updatedAt;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean isDeleted = Boolean.FALSE;

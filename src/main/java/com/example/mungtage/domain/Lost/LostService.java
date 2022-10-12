@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class LostService {
-    private LostRepository lostRepository;
+    private final LostRepository lostRepository;
 
     public Lost createLost(CreateLostRequestDto request) {
         Lost lost = new Lost();
