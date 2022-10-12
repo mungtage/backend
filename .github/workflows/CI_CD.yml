@@ -1,10 +1,3 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
-
 name: Java CI with Gradle
 
 on:
@@ -60,7 +53,7 @@ jobs:
        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       uses: Ilshidur/action-discord@master
       with:
-       args: '서버 배포가 진행중입니다!!! 서버가 5-6분 뒤에 다시 서버가 시작 됩니다.'
+       args: '🏃‍♂️🏃‍♂️ 서버 배포가 진행중입니다!!! 서버가 잠시 뒤에 다시 서버가 시작 됩니다.'
        
     - name: prod SSH Remote Commands
       uses: appleboy/ssh-action@v0.1.4
@@ -72,9 +65,15 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         timeout: 40s  # 30초 기본        
         script: |
-          echo "테스트 출력"
           docker stop mungtage
           docker rm mungtage
           docker rmi ${{ secrets.DOCKER_HUB_REPO }}:1.0
           docker pull ${{ secrets.DOCKER_HUB_REPO }}:1.0
           docker run --name=mungtage -p 80:8080 -e JAVA_OPTS=-Djasypt.encryptor.password=${{ secrets.ENCRYTOR_PASSWORD }} --restart unless-stopped -e TZ=Asia/Seoul -d ${{ secrets.DOCKER_HUB_REPO }}:1.0
+          
+    - name: Discord notification
+      env:
+       DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      uses: Ilshidur/action-discord@master
+      with:
+       args: '🙆‍♂️ 서버 배포가 되었습니다!!'
