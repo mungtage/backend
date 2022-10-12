@@ -51,7 +51,7 @@ jobs:
     - name: Docker build & push
       run: |
            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-           docker build -t mungtage .
+           docker build -f Dockerfile -t mungtage .
            docker tag mungtage ${{ secrets.DOCKER_HUB_REPO }}:1.0
            docker push ${{ secrets.DOCKER_HUB_REPO }}:1.0
            
