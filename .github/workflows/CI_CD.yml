@@ -72,11 +72,11 @@ jobs:
           docker run --name=mungtage -p 8080:8080 -e JAVA_OPTS=-Djasypt.encryptor.password=${{ secrets.ENCRYTOR_PASSWORD }} --restart unless-stopped -e TZ=Asia/Seoul -d ${{ secrets.DOCKER_HUB_REPO }}:1.0
 
     - name: Send status to Discord
+      if: always()
       uses: nebularg/actions-discord-webhook@v1
       with:
-        webhook_url: ${{ secrets.DISCORD_WEBHOOK }
-        status: ${{ job.status }}
-      if: always()
+         webhook_url: ${{ secrets.DISCORD_WEBHOOK }
+         status: ${{ job.status }}
 
     - name: Discord notification
       if: success()
