@@ -75,7 +75,7 @@ jobs:
       if: always()
       uses: nebularg/actions-discord-webhook@v1
       with:
-         webhook_url: ${{ secrets.DISCORD_WEBHOOK }
+         webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
          status: ${{ job.status }}
 
     - name: Discord notification
