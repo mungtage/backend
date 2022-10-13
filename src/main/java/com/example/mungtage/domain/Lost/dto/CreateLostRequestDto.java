@@ -7,9 +7,9 @@ import lombok.Data;
 
 @Data
 public class CreateLostRequestDto {
-    private String animalName;
-    private String happen_date;
-    private SexCode sexCode;
-    private NeuterYN neuterYN;
-    private Integer userId;
+    public final String animalName;
+    public final String happenDate;
+    public final SexCode sexCode;
+    public final NeuterYN neuterYN;
+    public final String userId;
 }

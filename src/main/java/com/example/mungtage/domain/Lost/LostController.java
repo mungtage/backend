@@ -1,6 +1,7 @@
 package com.example.mungtage.domain.Lost;
 
 import com.example.mungtage.domain.Lost.dto.CreateLostRequestDto;
+import com.example.mungtage.domain.Lost.dto.LostResponseDto;
 import com.example.mungtage.domain.Lost.model.Lost;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +16,10 @@ public class LostController {
     private final LostService lostService;
 
     @PostMapping("")
-    public ResponseEntity<Lost> createLost(@RequestBody CreateLostRequestDto request) {
-        return ResponseEntity.ok().body(lostService.createLost(request));
+    public ResponseEntity<LostResponseDto> createLost(@RequestBody CreateLostRequestDto request) {
+        Lost lost = lostService.createLost(request);
+
+        return ResponseEntity.ok().body(LostResponseDto.from(lost));
     }
 
     @GetMapping("")
