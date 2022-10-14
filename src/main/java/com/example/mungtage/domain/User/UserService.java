@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-    public User createUser(CreateUserRequestDto request) {
-        if(request.getEmail().isEmpty()){
-            throw new BadRequestException("이메일 값이 없습니다.");
-        }
-        User user= new User(request.getEmail());
-        return userRepository.save(user);
-    }
+//    public User createUser(CreateUserRequestDto request) {
+//        if(request.getEmail().isEmpty()){
+//            throw new BadRequestException("이메일 값이 없습니다.");
+//        }
+//        User user= new User(request.getEmail());
+//        return userRepository.save(user);
+//    }
 }
