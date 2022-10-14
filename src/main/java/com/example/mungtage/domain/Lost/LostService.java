@@ -16,7 +16,9 @@ public class LostService {
     private final UserRepository userRepository;
 
     public Lost createLost(CreateLostRequestDto request) {
+        System.out.println(request);
         Lost lost = new Lost(request);
+        System.out.println(lost);
         User user = userRepository.getReferenceById(Long.parseLong(request.getUserId()));
         lost.setUser(user);
         return lostRepository.save(lost);

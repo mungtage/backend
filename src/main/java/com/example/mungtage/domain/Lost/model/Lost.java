@@ -31,6 +31,8 @@ public class Lost extends BaseEntity {
     @Column(nullable = false)
     private String animalName;
 
+    private String image;
+
     @DateTimeFormat()
     private LocalDate happenDate;
 
@@ -56,6 +58,7 @@ public class Lost extends BaseEntity {
     public Lost (CreateLostRequestDto request) {
         this.isDeleted = false;
         this.animalName = request.getAnimalName();
+        this.image = request.getImage();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.happenDate = LocalDate.parse(request.getHappenDate(), formatter);
         this.sexCode = request.getSexCode();
