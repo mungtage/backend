@@ -18,3 +18,14 @@ spring:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+cloud:
+  aws:
+    credentials:
+      accessKey: "test"
+      secretKey: "test"
+    s3:
+      bucket: "test"
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
