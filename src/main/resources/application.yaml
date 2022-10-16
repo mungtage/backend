@@ -1,4 +1,6 @@
 spring:
+  profile:
+    include : oauth2
   main:
     allow-bean-definition-overriding: true
   jpa:
