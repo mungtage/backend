@@ -1,5 +1,6 @@
 package com.example.mungtage.domain.Lost;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.example.mungtage.domain.Lost.dto.CreateLostRequestDto;
 import com.example.mungtage.domain.Lost.model.Lost;
 import com.example.mungtage.domain.User.UserRepository;
@@ -7,6 +8,7 @@ import com.example.mungtage.domain.User.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,7 +26,7 @@ public class LostService {
         return lostRepository.save(lost);
     }
 
-    public List<Lost> getLosts() {
-        return lostRepository.findAll();
+    public List<Lost> getLosts(Long userId) {
+        return lostRepository.findByUserId(userId);
      }
 }
