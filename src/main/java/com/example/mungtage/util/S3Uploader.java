@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,7 +28,6 @@ public class S3Uploader {
 
     public String upload(MultipartFile multipartFile, String dirName) throws IOException{
         File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("파일 전환 실패"));
-
         return upload(uploadFile, dirName);
     }
     // S3로 파일 업로드하기
@@ -59,6 +59,9 @@ public class S3Uploader {
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
                 fos.write(multipartFile.getBytes());
+                System.out.println(multipartFile.getBytes());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
             return Optional.of(convertFile);
         }
