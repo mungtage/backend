@@ -20,6 +20,16 @@ spring:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-custom:
-  jwt:
-    secretKey: ENC(Hl5vOnuGZMdfNeEBu5XqObo9rj9FXM31YHZvorZb+29zJmErfDEwCt31GWppF/62OZUIXvW7N7wE/yLMjLInfeHvffUDjPjBaULhVo84y68OwnUlqr/5Ui16wT6vlnhXAUANzdddRf4=)
+
+cloud:
+  aws:
+    credentials:
+      accessKey: "test"
+      secretKey: "test"
+    s3:
+      bucket: "test"
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
