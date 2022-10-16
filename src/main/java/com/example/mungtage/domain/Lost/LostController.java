@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,13 @@ public class LostController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Lost>> getLosts() {
-        return ResponseEntity.ok().body(lostService.getLosts());
+    public ResponseEntity<ArrayList<LostResponseDto>> getLosts(@RequestParam String userId) {
+        Long id = Long.parseLong(userId);
+        List<Lost> losts = lostService.getLosts(id);
+        ArrayList<LostResponseDto> result = new ArrayList<>();
+        for (int i=0; i<losts.size(); i++) {
+            result.add(LostResponseDto.from(losts.get(i)));
+        }
+        return ResponseEntity.ok().body(result);
     }
 }

@@ -20,8 +20,8 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @Entity
 @Table(name = "lost")
-@SQLDelete(sql = "UPDATE lost SET deleted = true where id = ?")
-@Where(clause = "deleted = false")
+@SQLDelete(sql = "UPDATE lost SET is_deleted = true where id = ?")
+@Where(clause = "is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Lost extends BaseEntity {
     @Id

@@ -17,19 +17,17 @@ spring:
     url: ENC(OiAQxhCYyIj06VasfHOao4T48FtbXRn99opP1tJBtrTRcf996/oWvutZQh8A9O0XkVcB1dfmC+4K2WFF2eE0k8zZoeksVCt6Z8IbyozMHntUmURTODozSLrYBwV582sFG7vM+zEcsLVIytvYShHpBG5RQbBlHnobIHtL0SXr6a9VXBEjVVs7vKJhTzIQNS2V)
     username: ENC(2C4Z+DVEBjOHLdTFaaiRDQ==)
     password: ENC(Ru8rn54g8uSVcxbuVPfV+A==)
-jasypt:
-  encryptor:
-    bean: jasyptStringEncryptor
-
 cloud:
   aws:
     credentials:
-      accessKey: "test"
-      secretKey: "test"
+      accessKey: ENC(0k9s6IaVx7piBqiMCc7JZjqEwIvP0t1caffXs/5atNc=)
+      secretKey: ENC(I8barg4Cu8UtN0eoQxoWqCznx0/WH4goRGVqZ8AKvwNR9KXVZJ7MxfTTrQer3WUCO9GZ5egxuGE=)
     s3:
-      bucket: "test"
+      bucket: muntage
     region:
       static: ap-northeast-2
     stack:
       auto: false
-
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
