@@ -1,8 +1,10 @@
 package com.example.mungtage.domain.Lost.model;
 
 import com.example.mungtage.domain.Lost.dto.CreateLostRequestDto;
+import com.example.mungtage.domain.Match.Model.Match;
 import com.example.mungtage.domain.User.model.User;
 import com.example.mungtage.util.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,6 +17,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -54,6 +58,10 @@ public class Lost extends BaseEntity {
     @JoinColumn(name = "user_id")
     @JsonManagedReference
     private User user;
+
+    @OneToMany(mappedBy = "lost", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<Match> matches = new ArrayList<>();
 
     public Lost (CreateLostRequestDto request) {
         this.isDeleted = false;
