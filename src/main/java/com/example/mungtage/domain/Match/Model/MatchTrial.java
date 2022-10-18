@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -21,7 +22,7 @@ import java.util.List;
 @Table(name = "match_trial")
 @SQLDelete(sql = "UPDATE match_trial SET is_deleted = true where id = ?")
 @Where(clause = "is_deleted = false")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class MatchTrial extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +39,7 @@ public class MatchTrial extends BaseEntity {
     @JsonManagedReference
     private Lost lost;
 
-    @JsonBackReference
     @OneToMany(mappedBy = "matchTrial", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<MatchResult> matchResults = new ArrayList<>();
 }

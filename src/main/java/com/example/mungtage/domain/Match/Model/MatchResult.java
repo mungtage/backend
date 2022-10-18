@@ -36,4 +36,9 @@ public class MatchResult extends BaseEntity {
 
     @Column(columnDefinition = "boolean default false")
     private Boolean isDeleted = Boolean.FALSE;
+
+    public MatchResult (Long desertionNo, int rank) {
+        this.desertionNo = desertionNo;
+        this.rank = rank;
+    }
 }

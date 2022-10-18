@@ -4,12 +4,12 @@ import com.example.mungtage.domain.Lost.model.Lost;
 import com.example.mungtage.util.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
