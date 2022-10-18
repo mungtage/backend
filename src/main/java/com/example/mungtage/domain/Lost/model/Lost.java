@@ -1,7 +1,7 @@
 package com.example.mungtage.domain.Lost.model;
 
 import com.example.mungtage.domain.Lost.dto.CreateLostRequestDto;
-import com.example.mungtage.domain.Match.Model.Match;
+import com.example.mungtage.domain.Match.Model.MatchTrial;
 import com.example.mungtage.domain.User.model.User;
 import com.example.mungtage.util.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -61,7 +61,7 @@ public class Lost extends BaseEntity {
 
     @OneToMany(mappedBy = "lost", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<Match> matches = new ArrayList<>();
+    private List<MatchTrial> matchTrials = new ArrayList<>();
 
     public Lost (CreateLostRequestDto request) {
         this.isDeleted = false;

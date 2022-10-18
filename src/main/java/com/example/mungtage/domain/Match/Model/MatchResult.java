@@ -1,6 +1,5 @@
 package com.example.mungtage.domain.Match.Model;
 
-import com.example.mungtage.domain.Lost.model.Lost;
 import com.example.mungtage.util.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
@@ -25,9 +24,9 @@ public class MatchResult extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "match_id")
+    @JoinColumn(name = "match_trial_id")
     @JsonManagedReference
-    private Match match;
+    private MatchTrial matchTrial;
 
     @Column(nullable = false)
     private Long desertionNo;

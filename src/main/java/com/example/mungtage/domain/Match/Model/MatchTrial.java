@@ -18,11 +18,11 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "match")
-@SQLDelete(sql = "UPDATE match SET is_deleted = true where id = ?")
+@Table(name = "match_trial")
+@SQLDelete(sql = "UPDATE match_trial SET is_deleted = true where id = ?")
 @Where(clause = "is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Match extends BaseEntity {
+public class MatchTrial extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,6 +39,6 @@ public class Match extends BaseEntity {
     private Lost lost;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "match", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "matchTrial", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<MatchResult> matchResults = new ArrayList<>();
 }
