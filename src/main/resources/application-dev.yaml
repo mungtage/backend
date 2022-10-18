@@ -54,6 +54,10 @@ spring:
     url: ENC(wYbMzMFkATJAbPXdd+tTgE22KK6G2fJUwdiNApRF58DHvijV62P07w2krfquB2+KirYbHI0iLd9xEEEptzZv1ISWCcyP9Fc2tlxp32n0fXOWB7BYrwD34LVN/JkVtP79qXqXZvCknhdrITiWbARNPrbcb6zhbFevAcliH7ciGYXxpbpCiF3AkPQ+WUvFDMjk)
     username: ENC(2C4Z+DVEBjOHLdTFaaiRDQ==)
     password: ENC(Ru8rn54g8uSVcxbuVPfV+A==)
+  servlet:
+    multipart:
+      maxFileSize: 50MB
+      maxRequestSize: 50MB
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor

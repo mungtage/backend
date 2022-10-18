@@ -59,8 +59,6 @@ public class S3Uploader {
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
                 fos.write(multipartFile.getBytes());
-                // 해당 출력 문장이 없을 경우 에러 발생하여 추가하였음. 왜 이런 현상이 발생하는지 잘 모르겠어요.
-                System.out.println(multipartFile.getBytes());
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
