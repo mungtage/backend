@@ -1,7 +1,9 @@
 package com.example.mungtage.domain.User.model;
 
 import com.example.mungtage.domain.Lost.model.Lost;
+import com.example.mungtage.domain.User.dto.LoginResponseDto;
 import com.example.mungtage.util.BaseEntity;
+import com.example.mungtage.util.exception.BadRequestException;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -60,5 +62,16 @@ public class User extends BaseEntity {
 
     public String getRoleKey(){
         return this.role.getKey();
+    }
+
+    public LoginResponseDto toDto(){
+        if(this==null){
+            throw new BadRequestException("입력값이 없습니다.");
+        }
+        return LoginResponseDto.builder()
+                .id(this.getId())
+                .email(this.getEmail())
+                .userName(this.getName())
+                .build();
     }
 }
