@@ -10,7 +10,6 @@ public class CreateLostRequestDto {
     public final String animalName;
     public final String image;
     public final String happenDate;
-    public final SexCode sexCode;
-    public final NeuterYN neuterYN;
-    public final String userId;
+    public final String sexCode;
+    public final String neuterYN;
 }
