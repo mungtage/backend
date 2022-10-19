@@ -64,7 +64,7 @@ public class Lost extends BaseEntity {
     @JsonBackReference
     private List<MatchTrial> matchTrials = new ArrayList<>();
 
-    public Lost (CreateLostRequestDto request) {
+    public Lost (CreateLostRequestDto request, User user) {
         this.isDeleted = false;
         this.animalName = request.getAnimalName();
         this.image = request.getImage();
@@ -72,5 +72,6 @@ public class Lost extends BaseEntity {
         this.happenDate = LocalDate.parse(request.getHappenDate(), formatter);
         this.sexCode = request.getSexCode();
         this.neuterYN = request.getNeuterYN();
+        this.user = user;
     }
 }
