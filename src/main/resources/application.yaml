@@ -72,3 +72,6 @@ cloud:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+custom:
+  jwt:
+    secretKey: ENC(4eL6R6/CT+2w1ss8z9kbLCGT+TLF4JrAw4HATFWQGA0ZVg53roc2Ej/OOKsI5G/9kBSzPV8dZ5l84UNnKMF8Iw==)
