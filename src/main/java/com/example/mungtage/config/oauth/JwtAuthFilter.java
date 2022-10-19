@@ -42,7 +42,7 @@ public class JwtAuthFilter extends GenericFilterBean {
     }
 
     public Authentication getAuthentication(UserDto member) {
-        return new UsernamePasswordAuthenticationToken(member, "",
+        return new UsernamePasswordAuthenticationToken(member.getEmail(), "",
                 Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
     }
 }

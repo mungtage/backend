@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -12,7 +13,9 @@ import java.util.Date;
 
 @Service
 public class TokenService {
-    private String secretKey = "token-secret-keytoken-secret-keytoken-secret-keytoken-secret-keytoken-secret-keytoken-secret-key";
+
+    @Value("${custom.jwt.secretKey}")
+    private String secretKey;
 
     @PostConstruct
     protected void init() {

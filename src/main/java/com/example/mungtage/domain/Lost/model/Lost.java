@@ -55,13 +55,14 @@ public class Lost extends BaseEntity {
     @JsonManagedReference
     private User user;
 
-    public Lost (CreateLostRequestDto request) {
+    public Lost (CreateLostRequestDto request,User user) {
         this.isDeleted = false;
         this.animalName = request.getAnimalName();
         this.image = request.getImage();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.happenDate = LocalDate.parse(request.getHappenDate(), formatter);
-        this.sexCode = request.getSexCode();
-        this.neuterYN = request.getNeuterYN();
+        this.sexCode = SexCode.of(request.getSexCode());
+        this.neuterYN = NeuterYN.of(request.getNeuterYN());
+        this.user=user;
     }
 }
