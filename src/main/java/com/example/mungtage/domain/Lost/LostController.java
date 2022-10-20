@@ -25,7 +25,7 @@ public class LostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("")
-    public ResponseEntity<LostResponseDto> createLost(@RequestBody CreateLostRequestDto request,Principal principal) {
+    public ResponseEntity<LostResponseDto> createLost(@RequestBody CreateLostRequestDto request, Principal principal) {
         String userEmail=principal.getName();
         Lost lost = lostService.createLost(request,userEmail);
         return ResponseEntity.ok().body(LostResponseDto.from(lost));
