@@ -4,10 +4,16 @@ import com.example.mungtage.domain.Lost.LostRepository;
 import com.example.mungtage.domain.Lost.model.Lost;
 import com.example.mungtage.domain.Match.Model.MatchResult;
 import com.example.mungtage.domain.Match.Model.MatchTrial;
+import com.example.mungtage.domain.Match.dto.MatchResponseDto;
+import com.example.mungtage.domain.Match.dto.MatchResultResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,20 +30,36 @@ public class MatchService {
         return matchTrialRepository.save(matchTrial);
     }
 
-    public Boolean createMatchResult(MatchTrial matchTrial, Long desertionNo, int rank) {
-        MatchResult matchResult = new MatchResult(desertionNo, rank);
-        matchResult.setMatchTrial(matchTrial);
-        MatchResult result = matchResultRepository.save(matchResult);
+    public Boolean createMatchResults(MatchTrial matchTrial, List<Long> result) {
+        for (int i=0; i<result.size(); i++) {
+            MatchResult matchResult = new MatchResult(result.get(i), i+1);
+            matchResult.setMatchTrial(matchTrial);
+            matchResultRepository.save(matchResult);
+        }
         return true;
     }
 
     @Transactional(readOnly = true)
-    public MatchTrial updateMatchTrialDone(Long matchTrialId) throws ChangeSetPersister.NotFoundException {
+    public MatchResponseDto updateMatchTrialDone(Long matchTrialId) throws ChangeSetPersister.NotFoundException {
         MatchTrial matchTrial = matchTrialRepository.findById(matchTrialId).orElseThrow(ChangeSetPersister.NotFoundException::new);
         matchTrial.setIsDone(true);
-        MatchTrial result = matchTrialRepository.save(matchTrial);
 
-        return result;
+        Lost lost = matchTrial.getLost();
+        List<MatchResult> matchResults = matchTrial.getMatchResults();
+        List<MatchResultResponseDto> macthResultsResponse = matchResults
+                .stream()
+                .map(s -> MatchResultResponseDto.from(s))
+                .collect(Collectors.toList());
+
+        MatchResponseDto response = new MatchResponseDto();
+        response.setId(matchTrial.getId());
+        response.setLostId(lost.getId());
+        response.setIsDone(matchTrial.getIsDone());
+        response.setMatchResults(macthResultsResponse);
+
+        matchTrialRepository.save(matchTrial);
+
+        return response;
     }
 
     public MatchTrial getMatchTrial(Long matchTrialId) throws ChangeSetPersister.NotFoundException{

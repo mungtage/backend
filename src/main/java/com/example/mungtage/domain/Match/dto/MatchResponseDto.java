@@ -1,6 +1,5 @@
 package com.example.mungtage.domain.Match.dto;
 
-import com.example.mungtage.domain.Lost.model.Lost;
 import com.example.mungtage.domain.Match.Model.MatchResult;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MatchResponseDto {
     private Long id;
+    private Boolean isDone;
     private Long lostId;
-    private List<MatchResult> matchResults;
+    private List<MatchResultResponseDto> matchResults;
 }

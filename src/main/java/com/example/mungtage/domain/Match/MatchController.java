@@ -1,5 +1,6 @@
 package com.example.mungtage.domain.Match;
 
+import com.example.mungtage.domain.Lost.LostService;
 import com.example.mungtage.domain.Lost.model.Lost;
 import com.example.mungtage.domain.Match.Model.MatchTrial;
 import com.example.mungtage.domain.Match.dto.MatchResponseDto;
@@ -20,27 +21,24 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class MatchController {
     private final MatchService matchService;
+    private final LostService lostService;
     @GetMapping("")
     public ResponseEntity<MatchResponseDto> getMatchResult(@RequestParam String lostId) throws ChangeSetPersister.NotFoundException {
         MatchTrial matchTrial = matchService.createMatchTrial(Long.parseLong(lostId));
+
+        String lostImageURL = lostService.getLostImageURL(Long.parseLong(lostId));
 
         ArrayList<Long> modelResult = new ArrayList<>();
         modelResult.add(Long.valueOf(1));
         modelResult.add(Long.valueOf(2));
         modelResult.add(Long.valueOf(3));
 
-        for (int i=0; i<modelResult.size(); i++) {
-            Boolean result = matchService.createMatchResult(matchTrial, modelResult.get(i) , i+1);
-            if (!result) {
-                throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
-            }
+        Boolean result = matchService.createMatchResults(matchTrial, modelResult);
+        if (!result) {
+            throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
         }
-        MatchTrial updated = matchService.updateMatchTrialDone(matchTrial.getId());
+        MatchResponseDto response = matchService.updateMatchTrialDone(matchTrial.getId());
 
-        MatchResponseDto response = new MatchResponseDto();
-        response.setId(updated.getId());
-        response.setLostId(Long.parseLong(lostId));
-        response.setMatchResults(updated.getMatchResults());
         return ResponseEntity.ok().body(response);
     }
 }
