@@ -48,7 +48,7 @@ public class GoogleOauthService {
                 .collect(Collectors.joining("&"));
         return stringBuilder
                 .append("https://accounts.google.com/")
-                .append("/o/oauth2/v2/auth?")
+                .append("o/oauth2/v2/auth?")
                 .append(paramStr)
                 .toString();
     }

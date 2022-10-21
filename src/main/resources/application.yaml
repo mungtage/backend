@@ -77,6 +77,7 @@ custom:
   google:
     url: https://accounts.google.com/o/oauth2/v2/auth
     callback-url: http://localhost:3000/frontend/auth
+    scope : https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email
     client-id: ENC(1iB291mbiqlGVJC5RQeSTYZPmEDGFHc2AGNg/e98cfdrIKgp0fcyR5dDAgKcrG+jPP7UhHLd9XIwP+WdbudoBgcOP5umB6LNpNbfUdAyAUbREMHxmV147w==)
     client-secret: ENC(2ZlPmuO36z6BPwRNoaVo6g//j5lZJM9m4LvNn81+1dyPeredxVC8ya9UA6Q3xFS6)
   jwt:
