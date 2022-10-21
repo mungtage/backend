@@ -32,4 +32,8 @@ public class oAuthService {
         GoogleResponseDto googleResponseDto=new GoogleResponseDto(googleUser.getName(),googleUser.getEmail(),token.getJwtToken(),token.getRefreshToken());
         return googleResponseDto;
     }
+
+    public String googleUrl(String url){
+        return googleOauthService.googleInitUrl(url);
+    }
 }

@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,30 @@ public class GoogleOauthService {
     @Value("${custom.google.callback-url}")
     private String GOOGLE_SNS_CALLBACK_URL;
 
+    @Value("${custom.google.scope}")
+    private String GOOGLE_SCOPE;
+    private String REDIRECT_URL;
+
+
+    public String googleInitUrl(String url) {
+        StringBuilder stringBuilder=new StringBuilder();
+        REDIRECT_URL=url;
+        Map<String, Object> params = new HashMap<>();
+        params.put("client_id", GOOGLE_SNS_CLIENT_ID);
+        params.put("redirect_uri", url);
+        params.put("response_type", "code");
+        params.put("scope", GOOGLE_SCOPE);
+
+        String paramStr = params.entrySet().stream()
+                .map(param -> param.getKey() + "=" + param.getValue())
+                .collect(Collectors.joining("&"));
+        return stringBuilder
+                .append("https://accounts.google.com/")
+                .append("/o/oauth2/v2/auth?")
+                .append(paramStr)
+                .toString();
+    }
+
     public ResponseEntity<String> requestAccessToken(String code) {
         String GOOGLE_TOKEN_REQUEST_URL="https://oauth2.googleapis.com/token";
         RestTemplate restTemplate=new RestTemplate();
@@ -35,7 +60,7 @@ public class GoogleOauthService {
         params.put("code", code);
         params.put("client_id", GOOGLE_SNS_CLIENT_ID);
         params.put("client_secret", GOOGLE_SNS_CLIENT_SECRET);
-        params.put("redirect_uri", GOOGLE_SNS_CALLBACK_URL);
+        params.put("redirect_uri", REDIRECT_URL);
         params.put("grant_type", "authorization_code");
 
         ResponseEntity<String> responseEntity=restTemplate.postForEntity(GOOGLE_TOKEN_REQUEST_URL,
