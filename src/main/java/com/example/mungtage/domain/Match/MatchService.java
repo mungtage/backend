@@ -8,7 +8,6 @@ import com.example.mungtage.domain.Match.dto.MatchResponseDto;
 import com.example.mungtage.domain.Match.dto.MatchResultResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +51,7 @@ public class MatchService {
                 .collect(Collectors.toList());
 
         MatchResponseDto response = new MatchResponseDto();
-        response.setId(matchTrial.getId());
+        response.setMatchTrialId(matchTrial.getId());
         response.setLostId(lost.getId());
         response.setIsDone(matchTrial.getIsDone());
         response.setMatchResults(macthResultsResponse);

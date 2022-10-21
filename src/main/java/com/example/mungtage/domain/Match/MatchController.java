@@ -1,14 +1,12 @@
 package com.example.mungtage.domain.Match;
 
 import com.example.mungtage.domain.Lost.LostService;
-import com.example.mungtage.domain.Lost.model.Lost;
 import com.example.mungtage.domain.Match.Model.MatchTrial;
 import com.example.mungtage.domain.Match.dto.MatchResponseDto;
 import com.example.mungtage.util.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class MatchResponseDto {
-    private Long id;
+    private Long matchTrialId;
     private Boolean isDone;
     private Long lostId;
     private List<MatchResultResponseDto> matchResults;
