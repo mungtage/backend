@@ -19,7 +19,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class OauthController {
     private  final oAuthService oAuthService;
-    @GetMapping("")
+    @PostMapping("")
     public ResponseEntity<GoogleResponseDto> getGoogleUserInfo(@RequestBody UrlRequest urlRequest) throws IOException {
         System.out.println(">> 소셜 로그인 API 서버로부터 받은 code :"+ urlRequest.getCode());
         System.out.println(">> 소셜 로그인 API 서버로부터 받은 url :"+ urlRequest.getRedirectUrl());
