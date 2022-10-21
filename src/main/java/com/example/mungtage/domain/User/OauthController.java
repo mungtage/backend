@@ -23,4 +23,10 @@ public class OauthController {
         GoogleResponseDto GoogleUser = oAuthService.oAuthLogin(code);
         return new ResponseEntity<>(GoogleUser, HttpStatus.OK);
     }
+
+    @GetMapping("/google/url")
+    public ResponseEntity<String> getGoogleUrl(@RequestParam(name="redirect") String url){
+        String redirectUrl=oAuthService.googleUrl(url);
+        return new ResponseEntity<>(redirectUrl,HttpStatus.OK);
+    }
 }
