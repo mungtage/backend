@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -20,7 +21,7 @@ import java.io.IOException;
 public class OauthController {
     private  final oAuthService oAuthService;
     @PostMapping("")
-    public ResponseEntity<GoogleResponseDto> getGoogleUserInfo(@RequestBody UrlRequest urlRequest) throws IOException {
+    public ResponseEntity<GoogleResponseDto> getGoogleUserInfo(@RequestBody @Valid UrlRequest urlRequest) throws IOException {
         System.out.println(">> 소셜 로그인 API 서버로부터 받은 code :"+ urlRequest.getCode());
         System.out.println(">> 소셜 로그인 API 서버로부터 받은 url :"+ urlRequest.getRedirectUrl());
         GoogleResponseDto GoogleUser = oAuthService.oAuthLogin(urlRequest.getCode(),urlRequest.getRedirectUrl());
