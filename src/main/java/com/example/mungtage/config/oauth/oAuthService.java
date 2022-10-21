@@ -15,8 +15,8 @@ public class oAuthService {
     private final GoogleOauthService googleOauthService;
     private final TokenService tokenService;
     private final UserRepository userRepository;
-    public GoogleResponseDto oAuthLogin(String code) throws IOException {
-        ResponseEntity<String> accessTokenResponse= googleOauthService.requestAccessToken(code);
+    public GoogleResponseDto oAuthLogin(String code, String redirectUrl) throws IOException {
+        ResponseEntity<String> accessTokenResponse= googleOauthService.requestAccessToken(code,redirectUrl);
         GoogleOAuthToken oAuthToken=googleOauthService.getAccessToken(accessTokenResponse);
         ResponseEntity<String> userInfoResponse=googleOauthService.requestUserInfo(oAuthToken);
         GoogleUser googleUser= googleOauthService.getUserInfo(userInfoResponse);

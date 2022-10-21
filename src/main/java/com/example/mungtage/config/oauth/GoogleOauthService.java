@@ -53,14 +53,14 @@ public class GoogleOauthService {
                 .toString();
     }
 
-    public ResponseEntity<String> requestAccessToken(String code) {
+    public ResponseEntity<String> requestAccessToken(String code,String redirectUrl) {
         String GOOGLE_TOKEN_REQUEST_URL="https://oauth2.googleapis.com/token";
         RestTemplate restTemplate=new RestTemplate();
         Map<String, Object> params = new HashMap<>();
         params.put("code", code);
         params.put("client_id", GOOGLE_SNS_CLIENT_ID);
         params.put("client_secret", GOOGLE_SNS_CLIENT_SECRET);
-        params.put("redirect_uri", REDIRECT_URL);
+        params.put("redirect_uri", redirectUrl);
         params.put("grant_type", "authorization_code");
 
         ResponseEntity<String> responseEntity=restTemplate.postForEntity(GOOGLE_TOKEN_REQUEST_URL,
