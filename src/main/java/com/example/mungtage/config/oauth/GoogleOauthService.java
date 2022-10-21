@@ -1,6 +1,7 @@
 package com.example.mungtage.config.oauth;
 
 import com.example.mungtage.config.RestTemplateConfig;
+import com.example.mungtage.util.exception.BadRequestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -62,14 +64,14 @@ public class GoogleOauthService {
         params.put("client_secret", GOOGLE_SNS_CLIENT_SECRET);
         params.put("redirect_uri", redirectUrl);
         params.put("grant_type", "authorization_code");
-
-        ResponseEntity<String> responseEntity=restTemplate.postForEntity(GOOGLE_TOKEN_REQUEST_URL,
-                params,String.class);
-
-        if(responseEntity.getStatusCode()== HttpStatus.OK){
+        try {
+            ResponseEntity<String> responseEntity=restTemplate.postForEntity(GOOGLE_TOKEN_REQUEST_URL,
+                    params,String.class);
             return responseEntity;
+        }catch (RestClientException e){
+            e.printStackTrace();
+            throw new BadRequestException(String.format("인가코드로 구글의 AccessToken을 발급하지 못했습니다. code : %s, redirectUrl : %s",code,redirectUrl));
         }
-        return null;
     }
 
     public GoogleOAuthToken getAccessToken(ResponseEntity<String> response) throws JsonProcessingException {
@@ -88,9 +90,13 @@ public class GoogleOauthService {
 
         //HttpEntity를 하나 생성해 헤더를 담아서 restTemplate으로 구글과 통신하게 된다.
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(headers);
-        ResponseEntity<String> response=restTemplate.exchange(GOOGLE_USERINFO_REQUEST_URL, HttpMethod.GET,request,String.class);
-        System.out.println("response.getBody() = " + response.getBody());
-        return response;
+        try {
+            ResponseEntity<String> response=restTemplate.exchange(GOOGLE_USERINFO_REQUEST_URL, HttpMethod.GET,request,String.class);
+            System.out.println("response.getBody() = " + response.getBody());
+            return response;
+        }catch (RestClientException e){
+            throw  new BadRequestException("구글 AccessToken을 으로 사용자 정보를 가져오지 못했습니다.");
+        }
     }
 
     public GoogleUser getUserInfo(ResponseEntity<String> userInfoRes) throws JsonProcessingException{
