@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class MatchTrial extends BaseEntity {
     @JsonManagedReference
     private Lost lost;
 
-    @OneToMany(mappedBy = "matchTrial", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "matchTrial", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonBackReference
     private List<MatchResult> matchResults = new ArrayList<>();
 }

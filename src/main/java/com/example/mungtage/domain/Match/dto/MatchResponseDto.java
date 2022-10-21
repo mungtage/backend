@@ -2,7 +2,6 @@ package com.example.mungtage.domain.Match.dto;
 
 import com.example.mungtage.domain.Lost.model.Lost;
 import com.example.mungtage.domain.Match.Model.MatchResult;
-import com.example.mungtage.domain.Match.Model.MatchTrial;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class MatchResponseDto {
     private Long id;
-    private Lost lost;
+    private Long lostId;
     private List<MatchResult> matchResults;
 }

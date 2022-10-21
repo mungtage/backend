@@ -1,18 +1,18 @@
 package com.example.mungtage.domain.Match;
 
-import com.example.mungtage.domain.Match.Model.MatchResult;
+import com.example.mungtage.domain.Lost.model.Lost;
 import com.example.mungtage.domain.Match.Model.MatchTrial;
 import com.example.mungtage.domain.Match.dto.MatchResponseDto;
 import com.example.mungtage.util.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 @RestController
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class MatchController {
     private final MatchService matchService;
     @GetMapping("")
-    public ResponseEntity<MatchResponseDto> getMatchResult(@RequestParam String lostId) {
+    public ResponseEntity<MatchResponseDto> getMatchResult(@RequestParam String lostId) throws ChangeSetPersister.NotFoundException {
         MatchTrial matchTrial = matchService.createMatchTrial(Long.parseLong(lostId));
 
         ArrayList<Long> modelResult = new ArrayList<>();
@@ -35,11 +35,11 @@ public class MatchController {
                 throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
             }
         }
-
         MatchTrial updated = matchService.updateMatchTrialDone(matchTrial.getId());
+
         MatchResponseDto response = new MatchResponseDto();
         response.setId(updated.getId());
-        response.setLost(updated.getLost());
+        response.setLostId(Long.parseLong(lostId));
         response.setMatchResults(updated.getMatchResults());
         return ResponseEntity.ok().body(response);
     }
