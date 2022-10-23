@@ -1,4 +1,4 @@
-package com.example.mungtage.domain.Rescue.Model;
+package com.example.mungtage.domain.Rescue.model;
 
 import com.example.mungtage.util.BaseEntity;
 import lombok.AccessLevel;
@@ -36,7 +36,7 @@ public class Rescue extends BaseEntity {
     private String specialmark;
     private String careNm;
     private String careTel;
-    private String careAddf;
+    private String careAddr;
     private String orgNm;
     private String chargeNm;
     private String officetel;

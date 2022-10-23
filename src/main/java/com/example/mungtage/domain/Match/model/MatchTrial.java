@@ -1,4 +1,4 @@
-package com.example.mungtage.domain.Match.Model;
+package com.example.mungtage.domain.Match.model;
 
 import com.example.mungtage.domain.Lost.model.Lost;
 import com.example.mungtage.util.BaseEntity;
@@ -8,10 +8,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;

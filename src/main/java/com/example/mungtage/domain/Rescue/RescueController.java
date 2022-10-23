@@ -1,6 +1,6 @@
 package com.example.mungtage.domain.Rescue;
 
-import com.example.mungtage.domain.Rescue.dto.ResqueResponseDto;
+import com.example.mungtage.domain.Rescue.dto.RescueDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ public class RescueController {
     private final RescueService rescueService;
 
     @GetMapping("")
-    public ResponseEntity<ResqueResponseDto> getResqueDetail(@RequestParam String desertionNo) throws ChangeSetPersister.NotFoundException {
-        return ResponseEntity.ok().body(ResqueResponseDto.from(rescueService.getRescue(Long.parseLong(desertionNo))));
+    public ResponseEntity<RescueDto> getResqueDetail(@RequestParam String desertionNo) throws ChangeSetPersister.NotFoundException {
+        return ResponseEntity.ok().body(rescueService.getRescue(Long.parseLong(desertionNo)));
     }
 }

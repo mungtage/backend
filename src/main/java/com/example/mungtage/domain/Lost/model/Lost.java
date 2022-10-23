@@ -1,7 +1,7 @@
 package com.example.mungtage.domain.Lost.model;
 
 import com.example.mungtage.domain.Lost.dto.CreateLostRequestDto;
-import com.example.mungtage.domain.Match.Model.MatchTrial;
+import com.example.mungtage.domain.Match.model.MatchTrial;
 import com.example.mungtage.domain.User.model.User;
 import com.example.mungtage.util.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -10,7 +10,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;

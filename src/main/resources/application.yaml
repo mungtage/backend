@@ -50,10 +50,16 @@ spring:
       hibernate:
         default_batch_fetch_size: 1000
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: ENC(OiAQxhCYyIj06VasfHOao4T48FtbXRn99opP1tJBtrTRcf996/oWvutZQh8A9O0XkVcB1dfmC+4K2WFF2eE0k8zZoeksVCt6Z8IbyozMHntUmURTODozSLrYBwV582sFG7vM+zEcsLVIytvYShHpBG5RQbBlHnobIHtL0SXr6a9VXBEjVVs7vKJhTzIQNS2V)
-    username: ENC(2C4Z+DVEBjOHLdTFaaiRDQ==)
-    password: ENC(Ru8rn54g8uSVcxbuVPfV+A==)
+    primary:
+      driver-class-name: org.mariadb.jdbc.Driver
+      jdbc-url: ENC(OiAQxhCYyIj06VasfHOao4T48FtbXRn99opP1tJBtrTRcf996/oWvutZQh8A9O0XkVcB1dfmC+4K2WFF2eE0k8zZoeksVCt6Z8IbyozMHntUmURTODozSLrYBwV582sFG7vM+zEcsLVIytvYShHpBG5RQbBlHnobIHtL0SXr6a9VXBEjVVs7vKJhTzIQNS2V)
+      username: ENC(2C4Z+DVEBjOHLdTFaaiRDQ==)
+      password: ENC(Ru8rn54g8uSVcxbuVPfV+A==)
+    second:
+      driver-class-name: org.mariadb.jdbc.Driver
+      jdbc-url: ENC(sCCCWlDDxoRPaAl0QBJK2WnpP5l1mGsQKX+iRYlt06AIECusYdkbUxU+c2ISpqWCTQ5cB64bvYAkZLdEsCCMBlDNSLnaTLQw4AeMAQPWt+Tl77vv0E807qDbKAghFhmGBWBbngWMjnDW4UCCQE+B4kULvvSlVMpa0WuQMhkyNJwtmZl+EBl7T6W4ctJWnn1D)
+      username: ENC(2C4Z+DVEBjOHLdTFaaiRDQ==)
+      password: ENC(Ru8rn54g8uSVcxbuVPfV+A==)
   servlet:
     multipart:
       maxFileSize: 50MB

@@ -1,4 +1,4 @@
-package com.example.mungtage.domain.Match.Model;
+package com.example.mungtage.domain.Match.model;
 
 import com.example.mungtage.util.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

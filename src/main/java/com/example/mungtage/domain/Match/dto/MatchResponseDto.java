@@ -1,16 +1,25 @@
 package com.example.mungtage.domain.Match.dto;
 
-import com.example.mungtage.domain.Match.Model.MatchResult;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 public class MatchResponseDto {
-    private Long matchTrialId;
-    private Boolean isDone;
-    private Long lostId;
-    private List<MatchResultResponseDto> matchResults;
+    public final Long matchTrialId;
+    public final Boolean isDone;
+    public final Long lostId;
+    public final List<MatchResultWithRescueDto> matchResults;
+
+    public static MatchResponseDto from (
+            MatchTrialDto matchTrialDto,
+            List<MatchResultWithRescueDto> matchResultWithRescueDto
+    ) {
+        return new MatchResponseDto(
+                matchTrialDto.getMatchTrialId(),
+                matchTrialDto.getIsDone(),
+                matchTrialDto.getLostId(),
+                matchResultWithRescueDto
+        );
+    }
 }
