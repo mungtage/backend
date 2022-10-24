@@ -22,7 +22,7 @@ public class LostService {
     @Transactional
     public Lost createLost(CreateLostRequestDto request,String userEmail) {
         System.out.println(request);
-        User user = userRepository.findByEmail(userEmail).orElse(null);
+        User user = userRepository.findByEmail(userEmail).orElseThrow(()-> new BadRequestException("사용자 이름이 없습니다!!"));
         Lost newLost = new Lost(request,user);
         return lostRepository.save(newLost);
     }
