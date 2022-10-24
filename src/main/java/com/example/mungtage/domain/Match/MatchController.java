@@ -9,6 +9,8 @@ import com.example.mungtage.domain.Match.dto.MatchTrialDto;
 import com.example.mungtage.domain.Rescue.RescueService;
 import com.example.mungtage.domain.Rescue.dto.RescueDto;
 import com.example.mungtage.domain.Rescue.model.Rescue;
+import com.example.mungtage.domain.User.UserRepository;
+import com.example.mungtage.domain.User.model.User;
 import com.example.mungtage.util.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +32,14 @@ public class MatchController {
     private final LostService lostService;
     private final RescueService rescueService;
 
-    @GetMapping("")
-    public ResponseEntity<MatchResponseDto> getMatchResult(@RequestParam String lostId) throws ChangeSetPersister.NotFoundException {
-        MatchTrial matchTrial = matchService.createMatchTrial(Long.parseLong(lostId));
+    private final UserRepository userRepository;
 
-        String lostImageURL = lostService.getLostImageURL(Long.parseLong(lostId));
+    @GetMapping("")
+    public ResponseEntity<MatchResponseDto> getMatchResult(Principal principal) throws ChangeSetPersister.NotFoundException {
+        User CurrentUser=userRepository.findByEmail(principal.getName()).orElse(null);
+        MatchTrial matchTrial = matchService.createMatchTrial(CurrentUser.getId());
+
+        String lostImageURL = lostService.getLostImageURL(CurrentUser.getId());
 
         ArrayList<Long> modelResult = new ArrayList<>();
         modelResult.add(448548202200475L);
