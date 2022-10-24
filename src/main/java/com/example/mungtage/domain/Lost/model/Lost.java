@@ -1,8 +1,10 @@
 package com.example.mungtage.domain.Lost.model;
 
 import com.example.mungtage.domain.Lost.dto.CreateLostRequestDto;
+import com.example.mungtage.domain.Match.model.MatchTrial;
 import com.example.mungtage.domain.User.model.User;
 import com.example.mungtage.util.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,6 +17,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -55,14 +59,18 @@ public class Lost extends BaseEntity {
     @JsonManagedReference
     private User user;
 
-    public Lost (CreateLostRequestDto request,User user) {
+    @OneToMany(mappedBy = "lost", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<MatchTrial> matchTrials = new ArrayList<>();
+
+    public Lost (CreateLostRequestDto request, User user) {
         this.isDeleted = false;
         this.animalName = request.getAnimalName();
         this.image = request.getImage();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.happenDate = LocalDate.parse(request.getHappenDate(), formatter);
-        this.sexCode = SexCode.of(request.getSexCode());
-        this.neuterYN = NeuterYN.of(request.getNeuterYN());
-        this.user=user;
+        this.sexCode = request.getSexCode();
+        this.neuterYN = request.getNeuterYN();
+        this.user = user;
     }
 }

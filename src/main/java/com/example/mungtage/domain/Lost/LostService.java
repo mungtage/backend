@@ -29,5 +29,10 @@ public class LostService {
 
     public List<Lost> getLosts(Long userId) {
         return lostRepository.findByUserId(userId);
-     }
+    }
+
+    public String getLostImageURL(Long lostId) {
+        Lost lost = lostRepository.findById(lostId).get();
+        return lost.getImage();
+    }
 }
