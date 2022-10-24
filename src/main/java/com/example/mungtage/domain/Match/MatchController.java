@@ -32,14 +32,11 @@ public class MatchController {
     private final LostService lostService;
     private final RescueService rescueService;
 
-    private final UserRepository userRepository;
-
     @GetMapping("")
-    public ResponseEntity<MatchResponseDto> getMatchResult(Principal principal) throws ChangeSetPersister.NotFoundException {
-        User CurrentUser=userRepository.findByEmail(principal.getName()).orElse(null);
-        MatchTrial matchTrial = matchService.createMatchTrial(CurrentUser.getId());
+    public ResponseEntity<MatchResponseDto> getMatchResult(@RequestParam String lostId) throws ChangeSetPersister.NotFoundException {
+        MatchTrial matchTrial = matchService.createMatchTrial(Long.parseLong(lostId));
 
-        String lostImageURL = lostService.getLostImageURL(CurrentUser.getId());
+        String lostImageURL = lostService.getLostImageURL(Long.parseLong(lostId));
 
         ArrayList<Long> modelResult = new ArrayList<>();
         modelResult.add(448548202200475L);
