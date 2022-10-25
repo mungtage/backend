@@ -19,6 +19,8 @@ public class RescueDto {
     public final String kindCd;
     public final String processState;
     public final String weight;
+    public final String noticeSdt;
+    public final String noticeEdt;
 
     public static RescueDto from(Rescue rescue) {
         return new RescueDto(
@@ -27,7 +29,7 @@ public class RescueDto {
                 rescue.getCareAddr(),
                 rescue.getCareNm(),
                 rescue.getCareTel(),
-                rescue.getFilename(),
+                rescue.getPopfile(),
                 rescue.getHappenDt(),
                 rescue.getHappenPlace(),
                 rescue.getNeuterYn(),
@@ -35,7 +37,9 @@ public class RescueDto {
                 rescue.getSpecialmark(),
                 rescue.getKindCd(),
                 rescue.getProcessState(),
-                rescue.getWeight()
+                rescue.getWeight(),
+                rescue.getNoticeSdt(),
+                rescue.getNoticeEdt()
         );
     }
 }
