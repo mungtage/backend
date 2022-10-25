@@ -9,18 +9,18 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class CreateLostRequestDto {
-    @NotBlank
+    @NotBlank(message = "animalName 값이 없습니다.")
     public final String animalName;
 
-    @NotBlank
+    @NotBlank(message = "image 값이 없습니다.")
     public final String image;
 
-    @NotBlank
+    @NotBlank(message = "happenDate 값이 없습니다.")
     public final String happenDate;
 
-    @NotBlank
-    public final SexCode sexCode;
+    @NotBlank(message = "sexCode 값이 없습니다.")
+    public final String sexCode;
 
-    @NotBlank
+    @NotBlank(message = "neuterYN 값이 없습니다.")
     public final NeuterYN neuterYN;
 }

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class LostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("")
-    public ResponseEntity<LostResponseDto> createLost(@RequestBody CreateLostRequestDto request, Principal principal) {
+    public ResponseEntity<LostResponseDto> createLost(@RequestBody @Valid CreateLostRequestDto request, Principal principal) {
         String userEmail=principal.getName();
         Lost lost = lostService.createLost(request,userEmail);
         return ResponseEntity.ok().body(LostResponseDto.from(lost));

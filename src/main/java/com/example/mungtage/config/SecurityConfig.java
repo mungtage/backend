@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/token/**", "/oauth2/authorization/**", "/api/**").permitAll()
+                .antMatchers("/token/**", "/oauth2/authorization/**").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin().disable()
