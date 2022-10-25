@@ -19,7 +19,7 @@ public class CreateLostRequestDto {
     public final String happenDate;
 
     @NotBlank(message = "sexCode 값이 없습니다.")
-    public final String sexCode;
+    public final SexCode sexCode;
 
     @NotBlank(message = "neuterYN 값이 없습니다.")
     public final NeuterYN neuterYN;
