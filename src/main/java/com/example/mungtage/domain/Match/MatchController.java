@@ -36,7 +36,7 @@ public class MatchController {
 
         String lostImageURL = lostService.getLostImageURL(Long.parseLong(lostId));
 
-        Map<Long,Long> AIResponse = matchService.requestToAIServer(lostImageURL);
+        Map<String, String> AIResponse = matchService.requestToAIServer(lostImageURL);
         System.out.println(AIResponse);
 
         ArrayList<Long> modelResult = new ArrayList<>();

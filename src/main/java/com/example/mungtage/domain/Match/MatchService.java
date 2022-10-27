@@ -43,9 +43,10 @@ public class MatchService {
         return matchTrialRepository.save(matchTrial);
     }
 
-    public Boolean createMatchResults(MatchTrial matchTrial, List<Long> result) {
+    public Boolean createMatchResults(MatchTrial matchTrial, List<String> result) {
+        System.out.println(result);
         for (int i=0; i<result.size(); i++) {
-            MatchResult matchResult = new MatchResult(result.get(i), i+1);
+            MatchResult matchResult = new MatchResult(Long.parseLong(result.get(i)), i+1);
             matchResult.setMatchTrial(matchTrial);
             matchResultRepository.save(matchResult);
         }
@@ -79,7 +80,7 @@ public class MatchService {
         return matchTrialRepository.findById(matchTrialId).orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
 
-    public Map<Long,Long> requestToAIServer(String imageUrl) throws URISyntaxException, HttpServerErrorException {
+    public Map<String,String> requestToAIServer(String imageUrl) throws URISyntaxException, HttpServerErrorException {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
@@ -92,7 +93,7 @@ public class MatchService {
         if (response.getStatusCode() == HttpStatus.OK) {
             log.info("응답에 성공!! {}",response.getBody());
             try {
-                Map<Long, Long> map = objectMapper.readValue(response.getBody(), Map.class);
+                Map<String, String> map = objectMapper.readValue(response.getBody(), Map.class);
                 log.info("Json to Map 변환 성공!! {}",map);
                 return map;
             } catch (IOException e) {
