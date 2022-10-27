@@ -36,7 +36,7 @@ public class MatchController {
 
         String lostImageURL = lostService.getLostImageURL(Long.parseLong(lostId));
 
-        Map<String,String> AIResponse = matchService.requestToAIServer(lostImageURL);
+        Map<Long,Long> AIResponse = matchService.requestToAIServer(lostImageURL);
         System.out.println(AIResponse);
 
         ArrayList<Long> modelResult = new ArrayList<>();
@@ -44,7 +44,7 @@ public class MatchController {
         modelResult.add(448548202200474L);
         modelResult.add(448548202200473L);
 
-        Boolean result = matchService.createMatchResults(matchTrial, modelResult);
+        Boolean result = matchService.createMatchResults(matchTrial, new ArrayList<>(AIResponse.values()));
         if (!result) {
             throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
         }
