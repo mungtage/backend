@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/match")
@@ -35,7 +36,7 @@ public class MatchController {
 
         String lostImageURL = lostService.getLostImageURL(Long.parseLong(lostId));
 
-        Object AIResponse = matchService.requestToAIServer(lostImageURL);
+        Map<String,String> AIResponse = matchService.requestToAIServer(lostImageURL);
         System.out.println(AIResponse);
 
         ArrayList<Long> modelResult = new ArrayList<>();

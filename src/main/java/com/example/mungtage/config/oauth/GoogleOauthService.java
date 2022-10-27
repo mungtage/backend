@@ -12,6 +12,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -74,7 +75,7 @@ public class GoogleOauthService {
         }
     }
 
-    public GoogleOAuthToken getAccessToken(ResponseEntity<String> response) throws JsonProcessingException {
+    public GoogleOAuthToken getAccessToken(ResponseEntity<String> response) throws IOException {
         System.out.println("response.getBody() = " + response.getBody());
         GoogleOAuthToken googleOAuthToken= objectMapper.readValue(response.getBody(),GoogleOAuthToken.class);
         return googleOAuthToken;
@@ -99,7 +100,7 @@ public class GoogleOauthService {
         }
     }
 
-    public GoogleUser getUserInfo(ResponseEntity<String> userInfoRes) throws JsonProcessingException{
+    public GoogleUser getUserInfo(ResponseEntity<String> userInfoRes) throws IOException {
         GoogleUser googleUser=objectMapper.readValue(userInfoRes.getBody(),GoogleUser.class);
         return googleUser;
     }
