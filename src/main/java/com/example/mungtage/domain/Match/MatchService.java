@@ -8,9 +8,15 @@ import com.example.mungtage.domain.Match.dto.MatchTrialDto;
 import com.example.mungtage.domain.Match.dto.MatchResultDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,5 +69,26 @@ public class MatchService {
 
     public MatchTrial getMatchTrial(Long matchTrialId) throws ChangeSetPersister.NotFoundException{
         return matchTrialRepository.findById(matchTrialId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+    }
+
+    public Object requestToAIServer(String imageUrl) throws URISyntaxException, HttpServerErrorException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        HttpEntity<String> entity = new HttpEntity<String>("parameters", httpHeaders);
+        System.out.println(entity);
+        String aiServerURL = "http://49.50.163.148:5000/pd/?img=";
+
+        ResponseEntity<Object> response = restTemplate.exchange(new URI(aiServerURL+imageUrl), HttpMethod.GET, entity, Object.class);
+        System.out.println(response);
+
+        return response;
+//        if (response.getStatusCode() == HttpStatus.OK) {
+//            return response;
+//        } else {
+//            throw new HttpServerErrorException(response.getStatusCode(), "AI server request error");
+//        }
     }
 }
