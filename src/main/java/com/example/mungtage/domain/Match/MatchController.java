@@ -28,7 +28,6 @@ import java.util.Map;
 public class MatchController {
     private final MatchService matchService;
     private final LostService lostService;
-    private final RescueService rescueService;
 
     @GetMapping("")
     public ResponseEntity<MatchResponseDto> getMatchResult(@RequestParam String lostId) throws ChangeSetPersister.NotFoundException, URISyntaxException {
@@ -44,28 +43,13 @@ public class MatchController {
         modelResult.add(448548202200474L);
         modelResult.add(448548202200473L);
 
-        Boolean result = matchService.createMatchResults(matchTrial, new ArrayList<>(AIResponse.values()));
-        if (!result) {
-            throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
-        }
-
-        MatchTrialDto matchTrialDto = matchService.updateMatchTrialDone(matchTrial.getId());
-        List<MatchResultDto> matchResults = matchTrialDto.getMatchResults();
-
-        List<MatchResultWithRescueDto> withRescue = new ArrayList<>();
-
-        for (int i=0; i<matchResults.size(); i++) {
-            MatchResultDto matchResult = matchResults.get(i);
-            RescueDto rescue = rescueService.getRescue(matchResult.getDesertionNo());
-            MatchResultWithRescueDto matchResultWithRescueDto =
-                    MatchResultWithRescueDto.from(matchResult, rescue);
-            withRescue.add(matchResultWithRescueDto);
-        }
-
-        MatchResponseDto response = MatchResponseDto.from(
-                matchTrialDto, withRescue
-        );
+        MatchResponseDto response = matchService.getMatchResponseDto(matchTrial, AIResponse);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/auto")
+    public void startScheduler(){
+        matchService.searchAllLosts();
     }
 }
