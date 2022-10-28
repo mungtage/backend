@@ -49,10 +49,10 @@ public class MatchService {
         return matchTrialRepository.save(matchTrial);
     }
 
-    public Boolean createMatchResults(MatchTrial matchTrial, List<String> result) {
+    public Boolean createMatchResults(MatchTrial matchTrial, List<Long> result) {
         System.out.println(result);
         for (int i=0; i<result.size(); i++) {
-            MatchResult matchResult = new MatchResult(Long.parseLong(result.get(i)), i+1);
+            MatchResult matchResult = new MatchResult(result.get(i), i+1);
             matchResult.setMatchTrial(matchTrial);
             matchResultRepository.save(matchResult);
         }
@@ -109,8 +109,8 @@ public class MatchService {
             throw new HttpServerErrorException(response.getStatusCode(), "AI server request error");
         }
     }
-    public MatchResponseDto getMatchResponseDto(MatchTrial matchTrial, Map<String, String> AIResponse) throws ChangeSetPersister.NotFoundException {
-        Boolean result = createMatchResults(matchTrial, new ArrayList<>(AIResponse.values()));
+    public MatchResponseDto getMatchResponseDto(MatchTrial matchTrial, List<Long> AIResponse) throws ChangeSetPersister.NotFoundException {
+        Boolean result = createMatchResults(matchTrial, AIResponse);
         if (!result) {
             throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
         }
@@ -129,23 +129,23 @@ public class MatchService {
         );
     }
 
-    public void searchAllLosts() {
-        List<Lost> findAllLosts=lostRepository.findAll();
-        findAllLosts.stream()
-                .filter(lost -> !lost.getImage().isEmpty())
-                .forEach( lost -> {
-                            try {
-                                MatchTrial matchTrial=createMatchTrial(lost.getId());
-                                Map<String,String> aiResponse=requestToAIServer(lost.getImage());
-                                Boolean result = createMatchResults(matchTrial, new ArrayList<>(aiResponse.values()));
-                                if (!result) {
-                                    throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
-                                }
-                                // 메일로 보내는 로직 작성
-                            } catch (URISyntaxException | ChangeSetPersister.NotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                );
-    }
+//    public void searchAllLosts() {
+//        List<Lost> findAllLosts=lostRepository.findAll();
+//        findAllLosts.stream()
+//                .filter(lost -> !lost.getImage().isEmpty())
+//                .forEach( lost -> {
+//                            try {
+//                                MatchTrial matchTrial=createMatchTrial(lost.getId());
+//                                Map<String,String> aiResponse=requestToAIServer(lost.getImage());
+//                                Boolean result = createMatchResults(matchTrial, new ArrayList<>(aiResponse.values()));
+//                                if (!result) {
+//                                    throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
+//                                }
+//                                // 메일로 보내는 로직 작성
+//                            } catch (URISyntaxException | ChangeSetPersister.NotFoundException e) {
+//                                throw new RuntimeException(e);
+//                            }
+//                        }
+//                );
+//    }
 }

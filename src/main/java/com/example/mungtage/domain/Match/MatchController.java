@@ -35,21 +35,21 @@ public class MatchController {
 
         String lostImageURL = lostService.getLostImageURL(Long.parseLong(lostId));
 
-        Map<String, String> AIResponse = matchService.requestToAIServer(lostImageURL);
-        System.out.println(AIResponse);
+        //Map<String, String> AIResponse = matchService.requestToAIServer(lostImageURL);
+        //System.out.println(AIResponse);
 
         ArrayList<Long> modelResult = new ArrayList<>();
         modelResult.add(448548202200475L);
         modelResult.add(448548202200474L);
         modelResult.add(448548202200473L);
 
-        MatchResponseDto response = matchService.getMatchResponseDto(matchTrial, AIResponse);
+        MatchResponseDto response = matchService.getMatchResponseDto(matchTrial, modelResult);
 
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/auto")
-    public void startScheduler(){
-        matchService.searchAllLosts();
-    }
+//    @GetMapping("/auto")
+//    public void startScheduler(){
+//        matchService.searchAllLosts();
+//    }
 }
