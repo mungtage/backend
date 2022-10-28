@@ -35,6 +35,17 @@ spring:
     multipart:
       maxFileSize: 50MB
       maxRequestSize: 50MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: mungtagedev@gmail.com
+    password: ENC(pRl/4+0aFx+M/rUjX6vaDhD9A0NND4z2EN2lZGfGkJ0=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 cloud:
   aws:
     credentials:
@@ -58,3 +69,4 @@ custom:
     client-secret: ENC(2ZlPmuO36z6BPwRNoaVo6g//j5lZJM9m4LvNn81+1dyPeredxVC8ya9UA6Q3xFS6)
   jwt:
     secretKey: ENC(4eL6R6/CT+2w1ss8z9kbLCGT+TLF4JrAw4HATFWQGA0ZVg53roc2Ej/OOKsI5G/9kBSzPV8dZ5l84UNnKMF8Iw==)
+
