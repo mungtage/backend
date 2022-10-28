@@ -35,6 +35,17 @@ spring:
     multipart:
       maxFileSize: 50MB
       maxRequestSize: 50MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: mungtagedev@gmail.com
+    password: ENC(pRl/4+0aFx+M/rUjX6vaDhD9A0NND4z2EN2lZGfGkJ0=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
