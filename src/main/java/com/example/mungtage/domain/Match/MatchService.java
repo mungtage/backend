@@ -28,10 +28,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,7 +53,8 @@ public class MatchService {
     public Boolean createMatchResults(MatchTrial matchTrial, List<String> result) {
         System.out.println(result);
         for (int i=0; i<result.size(); i++) {
-            MatchResult matchResult = new MatchResult(Long.parseLong(result.get(i)), i+1);
+            List<String> parsingNumber= Arrays.stream(result.get(i).split("_")).collect(Collectors.toList());
+            MatchResult matchResult = new MatchResult(Long.parseLong(parsingNumber.get(0)), i+1);
             matchResult.setMatchTrial(matchTrial);
             matchResultRepository.save(matchResult);
         }
@@ -96,7 +94,7 @@ public class MatchService {
         httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
         HttpEntity<String> entity = new HttpEntity<String>("parameters", httpHeaders);
-        System.out.println(entity);
+        log.info("AI로부터 실종 이미지 전송");
         String aiServerURL = "http://49.50.163.148:5000/pd/?img=";
 
         ResponseEntity<String> response = restTemplate.exchange(new URI(aiServerURL+imageUrl), HttpMethod.GET, entity, String.class);
