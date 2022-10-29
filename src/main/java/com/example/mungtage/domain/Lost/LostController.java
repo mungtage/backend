@@ -8,6 +8,7 @@ import com.example.mungtage.domain.User.UserRepository;
 import com.example.mungtage.domain.User.UserService;
 import com.example.mungtage.domain.User.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +47,12 @@ public class LostController {
             result.add(LostResponseDto.from(lost));
         }
         return ResponseEntity.ok().body(result);
+    }
+
+    @DeleteMapping("/{lostId}")
+    public ResponseEntity<Boolean> deleteLost(@PathVariable(name = "lostId")Long lostId,Principal principal){
+        String email=principal.getName();
+        User currentUser=userService.findByUserEmail(email);
+        return new ResponseEntity<>(lostService.deleteLostId(lostId,currentUser.getId()), HttpStatus.OK);
     }
 }
