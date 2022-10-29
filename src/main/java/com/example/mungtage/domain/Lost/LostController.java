@@ -33,7 +33,7 @@ public class LostController {
         String userEmail=principal.getName();
         Lost lost = lostService.createLost(request,userEmail);
         //저장된 lost 이미지를 ai서버로 보내기
-        matchService.requestToAIServer(lost.getImage());
+        //matchService.requestToAIServer(lost.getImage());
         return ResponseEntity.ok().body(LostResponseDto.from(lost));
     }
     @PreAuthorize("isAuthenticated()")
