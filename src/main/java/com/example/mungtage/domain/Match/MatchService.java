@@ -13,7 +13,6 @@ import com.example.mungtage.util.exception.BadRequestException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +29,8 @@ import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.domain.Sort.Order.asc;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +53,8 @@ public class MatchService {
     }
 
     public List<MatchResultDto> getLastMatchResults(Long lostId) {
-        PageRequest pageRequest = PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "updated_date"));
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(asc("rank")));
+        System.out.println(pageRequest);
         List<MatchResult> result = matchResultRepository.findByLostId(lostId, pageRequest);
         List<MatchResultDto> dto = result
                 .stream()
@@ -68,8 +70,8 @@ public class MatchService {
         httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
         HttpEntity<String> entity = new HttpEntity<String>("parameters", httpHeaders);
-        System.out.println(entity);
         String aiServerURL = "http://49.50.163.148:5000/pd/?img="+imageUrl+"&happenDate="+happenDate ;
+        System.out.println(aiServerURL);
         log.info("AI로부터 실종 이미지 전송");
 
         ResponseEntity<String> response = restTemplate.exchange(new URI(aiServerURL), HttpMethod.GET, entity, String.class);
@@ -112,26 +114,23 @@ public class MatchService {
         List<MatchResultWithRescueDto> withRescue = new ArrayList<>();
         for (MatchResultDto matchResult : matchResults) {
             RescueDto rescue = rescueService.getRescue(matchResult.getDesertionNo());
+            System.out.println(rescue);
             MatchResultWithRescueDto matchResultWithRescueDto =
                     MatchResultWithRescueDto.from(matchResult, rescue);
             withRescue.add(matchResultWithRescueDto);
+            System.out.println(withRescue);
         }
         return MatchResponseDto.from(lostId, withRescue);
     }
     @Async
     public void test(Lost lost) throws URISyntaxException {
-        Map<String, String> AIResponse = requestToAIServer(lost.getImage(), lost.getHappenDate().toString());
+        Map<String, String> AIResponse = requestToAIServer(lost.getImage(), lost.getHappenDate().toString().replace("-", ""));
         Boolean isWellCreated = createMatchResults(lost, new ArrayList<>(AIResponse.values()));
         if (!isWellCreated) {
             throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
         }
         MatchResponseDto response = getMatchResponseDto(lost.getId());
-        List<MatchResultWithRescueDto> matchResultWithRescueDtos=response.getMatchResults()
-                .stream()
-                .sorted(Comparator.comparing(MatchResultWithRescueDto::getRank))
-                .filter(x->x.getRank()<=3)
-                .collect(Collectors.toList());
-        emailService.makeTemplate(lost,matchResultWithRescueDtos);
+        emailService.makeTemplate(lost, response.getMatchResults());
     }
 
 
