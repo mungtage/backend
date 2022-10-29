@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,5 +38,20 @@ public class LostService {
     public String getLostImageURL(Long lostId) {
         Lost lost = lostRepository.findById(lostId).get();
         return lost.getImage();
+    }
+
+    public Boolean deleteLostId(Long lostId,Long userid) {
+        try {
+            Lost lost=lostRepository.findById(lostId).orElseThrow(()-> new BadRequestException("lostId로 매칭된 결과가 없습니다"));
+            if(lost.getUser().getId().equals(userid)){
+                lostRepository.deleteById(lostId);
+                return true;
+            }
+            throw new BadRequestException("사용자가 등록하지 않은 게시글은 삭제할수 없습니다");
+        }catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            throw new BadRequestException("삭제하지 못했습니다.");
+        }
+
     }
 }
