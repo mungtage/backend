@@ -32,13 +32,13 @@ public class MatchTrial extends BaseEntity {
 
     @Column(columnDefinition = "boolean default false")
     private Boolean isDeleted = Boolean.FALSE;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lost_id")
-    @JsonManagedReference
-    private Lost lost;
-
-    @OneToMany(mappedBy = "matchTrial", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonBackReference
-    private List<MatchResult> matchResults = new ArrayList<>();
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "lost_id")
+//    @JsonManagedReference
+//    private Lost lost;
+//
+//    @OneToMany(mappedBy = "matchTrial", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JsonBackReference
+//    private List<MatchResult> matchResults = new ArrayList<>();
 }

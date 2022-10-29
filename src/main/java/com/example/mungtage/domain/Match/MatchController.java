@@ -1,6 +1,7 @@
 package com.example.mungtage.domain.Match;
 
 import com.example.mungtage.domain.Lost.LostService;
+import com.example.mungtage.domain.Lost.model.Lost;
 import com.example.mungtage.domain.Match.dto.MatchResultDto;
 import com.example.mungtage.domain.Match.dto.MatchResultWithRescueDto;
 import com.example.mungtage.domain.Match.dto.MatchResponseDto;
@@ -30,20 +31,13 @@ public class MatchController {
     private final LostService lostService;
 
     @GetMapping("")
-    public ResponseEntity<MatchResponseDto> getMatchResult(@RequestParam String lostId) throws ChangeSetPersister.NotFoundException, URISyntaxException {
-        MatchTrial matchTrial = matchService.createMatchTrial(Long.parseLong(lostId));
+    public ResponseEntity<MatchResponseDto> getMatchResult(@RequestParam Long lostId) throws ChangeSetPersister.NotFoundException, URISyntaxException {
+        Lost lost = lostService.getLost(lostId);
 
-        String lostImageURL = lostService.getLostImageURL(Long.parseLong(lostId));
+        Map<String, String> AIResponse = matchService.requestToAIServer(lost.getImage(), lost.getHappenDate().toString());
+        System.out.println(AIResponse);
 
-        //Map<String, String> AIResponse = matchService.requestToAIServer(lostImageURL);
-        //System.out.println(AIResponse);
-
-        ArrayList<Long> modelResult = new ArrayList<>();
-        modelResult.add(448548202200475L);
-        modelResult.add(448548202200474L);
-        modelResult.add(448548202200473L);
-
-        MatchResponseDto response = matchService.getMatchResponseDto(matchTrial, modelResult);
+        MatchResponseDto response = matchService.getMatchResponseDto(lostId, AIResponse.values());
 
         return ResponseEntity.ok().body(response);
     }

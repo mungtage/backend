@@ -35,9 +35,8 @@ public class LostService {
         return lostRepository.findByUserId(userId);
     }
 
-    public String getLostImageURL(Long lostId) {
-        Lost lost = lostRepository.findById(lostId).get();
-        return lost.getImage();
+    public Lost getLost(Long lostId) {
+        return lostRepository.findById(lostId).get();
     }
 
     public Boolean deleteLostId(Long lostId,Long userid) {
