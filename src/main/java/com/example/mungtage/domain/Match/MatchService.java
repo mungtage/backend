@@ -10,6 +10,7 @@ import com.example.mungtage.domain.Match.dto.MatchTrialDto;
 import com.example.mungtage.domain.Match.dto.MatchResultDto;
 import com.example.mungtage.domain.Rescue.RescueService;
 import com.example.mungtage.domain.Rescue.dto.RescueDto;
+import com.example.mungtage.util.EmailService;
 import com.example.mungtage.util.exception.BadRequestException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpServerErrorException;
@@ -27,6 +29,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,6 +43,7 @@ public class MatchService {
     private final MatchResultRepository matchResultRepository;
     private final LostRepository lostRepository;
     private final RescueService rescueService;
+    private final EmailService emailService;
 
     public MatchTrial createMatchTrial(Long lostId) throws ChangeSetPersister.NotFoundException {
         MatchTrial matchTrial = new MatchTrial();
@@ -49,10 +53,10 @@ public class MatchService {
         return matchTrialRepository.save(matchTrial);
     }
 
-    public Boolean createMatchResults(MatchTrial matchTrial, List<Long> result) {
+    public Boolean createMatchResults(MatchTrial matchTrial, List<String> result) {
         System.out.println(result);
         for (int i=0; i<result.size(); i++) {
-            MatchResult matchResult = new MatchResult(result.get(i), i+1);
+            MatchResult matchResult = new MatchResult(Long.parseLong(result.get(i)), i+1);
             matchResult.setMatchTrial(matchTrial);
             matchResultRepository.save(matchResult);
         }
@@ -109,7 +113,7 @@ public class MatchService {
             throw new HttpServerErrorException(response.getStatusCode(), "AI server request error");
         }
     }
-    public MatchResponseDto getMatchResponseDto(MatchTrial matchTrial, List<Long> AIResponse) throws ChangeSetPersister.NotFoundException {
+    public MatchResponseDto getMatchResponseDto(MatchTrial matchTrial, List<String> AIResponse) throws ChangeSetPersister.NotFoundException {
         Boolean result = createMatchResults(matchTrial, AIResponse);
         if (!result) {
             throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
@@ -128,24 +132,37 @@ public class MatchService {
                 matchTrialDto, withRescue
         );
     }
+    @Async
+    public void test(Lost lost) throws ChangeSetPersister.NotFoundException, URISyntaxException {
+        MatchTrial matchTrial = createMatchTrial(lost.getId());
+        Map<String, String> AIResponse = requestToAIServer(lost.getImage());
+        MatchResponseDto response = getMatchResponseDto(matchTrial, new ArrayList<>(AIResponse.values()));
+        List<MatchResultWithRescueDto> matchResultWithRescueDtos=response.getMatchResults()
+                .stream()
+                .sorted(Comparator.comparing(MatchResultWithRescueDto::getRank))
+                .filter(x->x.getRank()<=3)
+                .collect(Collectors.toList());
+        emailService.makeTemplate(lost,matchResultWithRescueDtos);
+    }
 
-//    public void searchAllLosts() {
-//        List<Lost> findAllLosts=lostRepository.findAll();
-//        findAllLosts.stream()
-//                .filter(lost -> !lost.getImage().isEmpty())
-//                .forEach( lost -> {
-//                            try {
-//                                MatchTrial matchTrial=createMatchTrial(lost.getId());
-//                                Map<String,String> aiResponse=requestToAIServer(lost.getImage());
-//                                Boolean result = createMatchResults(matchTrial, new ArrayList<>(aiResponse.values()));
-//                                if (!result) {
-//                                    throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
-//                                }
-//                                // 메일로 보내는 로직 작성
-//                            } catch (URISyntaxException | ChangeSetPersister.NotFoundException e) {
-//                                throw new RuntimeException(e);
-//                            }
-//                        }
-//                );
-//    }
+
+    public void searchAllLosts() {
+        List<Lost> findAllLosts=lostRepository.findAll();
+        findAllLosts.stream()
+                .filter(lost -> !lost.getImage().isEmpty())
+                .forEach( lost -> {
+                            try {
+                                MatchTrial matchTrial=createMatchTrial(lost.getId());
+                                Map<String,String> aiResponse=requestToAIServer(lost.getImage());
+                                Boolean result = createMatchResults(matchTrial, new ArrayList<>(aiResponse.values()));
+                                if (!result) {
+                                    throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
+                                }
+                                // 메일로 보내는 로직 작성
+                            } catch (URISyntaxException | ChangeSetPersister.NotFoundException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                );
+    }
 }

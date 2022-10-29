@@ -35,15 +35,15 @@ public class MatchController {
 
         String lostImageURL = lostService.getLostImageURL(Long.parseLong(lostId));
 
-        //Map<String, String> AIResponse = matchService.requestToAIServer(lostImageURL);
-        //System.out.println(AIResponse);
+        Map<String, String> AIResponse = matchService.requestToAIServer(lostImageURL);
+        System.out.println(AIResponse);
 
         ArrayList<Long> modelResult = new ArrayList<>();
         modelResult.add(448548202200475L);
         modelResult.add(448548202200474L);
         modelResult.add(448548202200473L);
 
-        MatchResponseDto response = matchService.getMatchResponseDto(matchTrial, modelResult);
+        MatchResponseDto response = matchService.getMatchResponseDto(matchTrial, new ArrayList<>(AIResponse.values()));
 
         return ResponseEntity.ok().body(response);
     }

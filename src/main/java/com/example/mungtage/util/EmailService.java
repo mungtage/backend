@@ -1,5 +1,8 @@
 package com.example.mungtage.util;
 
+import com.example.mungtage.domain.Lost.model.Lost;
+import com.example.mungtage.domain.Match.dto.MatchResultWithRescueDto;
+import com.example.mungtage.domain.Rescue.model.Rescue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,6 +15,7 @@ import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
 
 
 @Service
@@ -19,6 +23,7 @@ import javax.mail.internet.MimeMessage;
 @RequiredArgsConstructor
 public class EmailService {
     private final JavaMailSender javaMailSender;
+    private final TemplateEngine templateEngine;
 
     public void sendSimpleMessage(String email, Long lostId) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -32,6 +37,22 @@ public class EmailService {
         message.setText(text);
 
         javaMailSender.send(message);
+    }
+
+    public void makeTemplate(Lost lost, List<MatchResultWithRescueDto> rescueList){
+        Context context = new Context();
+        context.setVariable("lost", lost);
+        context.setVariable("MatchResultWithRescueDto1", rescueList.get(0));
+        context.setVariable("MatchResultWithRescueDto2", rescueList.get(1));
+        context.setVariable("MatchResultWithRescueDto3", rescueList.get(2));
+        String message = templateEngine.process("mail/emails", context);
+        System.out.println(message);
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(lost.getUser().getEmail())
+                .subject("[멍타주] 매칭 결과가 나왔어요")
+                .message(message)
+                .build();
+        sendEmail(emailMessage);
     }
 
     @Async
