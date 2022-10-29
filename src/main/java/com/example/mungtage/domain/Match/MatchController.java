@@ -12,6 +12,7 @@ import com.example.mungtage.domain.Rescue.dto.RescueDto;
 import com.example.mungtage.util.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,13 +32,8 @@ public class MatchController {
     private final LostService lostService;
 
     @GetMapping("")
-    public ResponseEntity<MatchResponseDto> getMatchResult(@RequestParam Long lostId) throws ChangeSetPersister.NotFoundException, URISyntaxException {
-        Lost lost = lostService.getLost(lostId);
-
-        Map<String, String> AIResponse = matchService.requestToAIServer(lost.getImage(), lost.getHappenDate().toString());
-        System.out.println(AIResponse);
-
-        MatchResponseDto response = matchService.getMatchResponseDto(lost.getId(), new ArrayList<>(AIResponse.values()));
+    public ResponseEntity<MatchResponseDto> getMatchResult(@RequestParam Long lostId, Pageable pageable) {
+        MatchResponseDto response = matchService.getPagedMatchResultResponseDto(lostId, pageable);
 
         return ResponseEntity.ok().body(response);
     }
