@@ -37,7 +37,7 @@ public class MatchController {
         Map<String, String> AIResponse = matchService.requestToAIServer(lost.getImage(), lost.getHappenDate().toString());
         System.out.println(AIResponse);
 
-        MatchResponseDto response = matchService.getMatchResponseDto(lostId, AIResponse.values());
+        MatchResponseDto response = matchService.getMatchResponseDto(lost.getId(), new ArrayList<>(AIResponse.values()));
 
         return ResponseEntity.ok().body(response);
     }

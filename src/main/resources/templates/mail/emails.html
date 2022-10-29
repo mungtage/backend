@@ -49,7 +49,7 @@
           "
         >
             <img
-                    th:src="${rescue1.filename}"
+                    th:src="${MatchResultWithRescueDto1.imageUrl}"
                     style="
               width: 100px;
               height: 120px;
@@ -59,9 +59,9 @@
             />
             <!--여기 src에 이미지 경로-->
             <div style="font-weight: 800">1위</div>
-            <div>[[${rescue1.happenDt}]]</div>
+            <div>[[${MatchResultWithRescueDto1.happenDt}]]</div>
             <!-- 여기 구조된 날짜랑-->
-            <div>[[${rescue1.happenPlace}]]</div>
+            <div>[[${MatchResultWithRescueDto1.happenPlace}]]</div>
             <!--장소 넣어주시면 됩니다-->
         </div>
         <div
@@ -73,7 +73,7 @@
           "
         >
             <img
-                    th:src="${rescue2.filename}"
+                    th:src="${MatchResultWithRescueDto2.imageUrl}"
                     style="
               width: 100px;
               height: 120px;
@@ -83,9 +83,9 @@
             />
             <!--여기도 마찬가지로 src에 이미지 경로-->
             <div style="font-weight: 800">2위</div>
-            <div>[[${rescue2.happenDt}]]</div>
+            <div>[[${MatchResultWithRescueDto2.happenDt}]]</div>
             <!--구조된 날짜-->
-            <div>[[${rescue3.happenPlace}]]</div>
+            <div>[[${MatchResultWithRescueDto2.happenPlace}]]</div>
             <!--장소-->
         </div>
         <div
@@ -97,7 +97,7 @@
           "
         >
             <img
-                    th:src="${rescue3.filename}"
+                    th:src="${MatchResultWithRescueDto3.imageUrl}"
                     style="
               width: 100px;
               height: 120px;
@@ -107,9 +107,9 @@
             />
             <!--여기도 마찬가지로 src에 이미지 경로-->
             <div style="font-weight: 800">3위</div>
-            <div>[[${rescue3.happenDt}]]</div>
+            <div>[[${MatchResultWithRescueDto3.happenDt}]]</div>
             <!--구조된 날짜-->
-            <div>[[${rescue3.happenPlace}]]</div>
+            <div>[[${MatchResultWithRescueDto3.happenPlace}]]</div>
             <!--장소-->
         </div>
     </div>
