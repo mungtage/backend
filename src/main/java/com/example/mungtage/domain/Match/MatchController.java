@@ -1,28 +1,18 @@
 package com.example.mungtage.domain.Match;
 
 import com.example.mungtage.domain.Lost.LostService;
-import com.example.mungtage.domain.Lost.model.Lost;
-import com.example.mungtage.domain.Match.dto.MatchResultDto;
-import com.example.mungtage.domain.Match.dto.MatchResultWithRescueDto;
 import com.example.mungtage.domain.Match.dto.MatchResponseDto;
-import com.example.mungtage.domain.Match.model.MatchTrial;
-import com.example.mungtage.domain.Match.dto.MatchTrialDto;
-import com.example.mungtage.domain.Rescue.RescueService;
-import com.example.mungtage.domain.Rescue.dto.RescueDto;
-import com.example.mungtage.util.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1/match")
@@ -33,9 +23,13 @@ public class MatchController {
 
     @GetMapping("")
     public ResponseEntity<MatchResponseDto> getMatchResult(@RequestParam Long lostId, Pageable pageable) {
-        MatchResponseDto response = matchService.getPagedMatchResultResponseDto(lostId, pageable);
-
-        return ResponseEntity.ok().body(response);
+        try {
+            return ResponseEntity
+                    .ok()
+                    .body(matchService.getPagedMatchResultResponseDto(lostId, pageable));
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
 //    @GetMapping("/auto")

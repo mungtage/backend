@@ -87,20 +87,24 @@ public class MatchService {
         }
     }
 
-    public MatchResponseDto getPagedMatchResultResponseDto(Long lostId, Pageable pageable) {
-        Page<MatchResult> matchResultPage = matchResultRepository.findByLostIdOrderByUpdatedDateDesc(lostId, pageable);
-        List<MatchResultDto> matchResults = matchResultPage
-                .stream()
-                .map(s -> MatchResultDto.from(s))
-                .collect(Collectors.toList());
-        List<MatchResultWithRescueDto> withRescue = new ArrayList<>();
-        for (MatchResultDto matchResult : matchResults) {
-            RescueDto rescue = rescueService.getRescue(matchResult.getDesertionNo());
-            MatchResultWithRescueDto matchResultWithRescueDto =
-                    MatchResultWithRescueDto.from(matchResult, rescue);
-            withRescue.add(matchResultWithRescueDto);
+    public MatchResponseDto getPagedMatchResultResponseDto(Long lostId, Pageable pageable) throws BadRequestException {
+        try {
+            Page<MatchResult> matchResultPage = matchResultRepository.findByLostIdOrderByUpdatedDateDesc(lostId, pageable);
+            List<MatchResultDto> matchResults = matchResultPage
+                    .stream()
+                    .map(s -> MatchResultDto.from(s))
+                    .collect(Collectors.toList());
+            List<MatchResultWithRescueDto> withRescue = new ArrayList<>();
+            for (MatchResultDto matchResult : matchResults) {
+                RescueDto rescue = rescueService.getRescue(matchResult.getDesertionNo());
+                MatchResultWithRescueDto matchResultWithRescueDto =
+                        MatchResultWithRescueDto.from(matchResult, rescue);
+                withRescue.add(matchResultWithRescueDto);
+            }
+            return MatchResponseDto.from(lostId, withRescue);
+        } catch (Error e) {
+            throw new BadRequestException(e.getMessage());
         }
-        return MatchResponseDto.from(lostId, withRescue);
     }
 
     public MatchResponseDto getMatchResponseDto(Long lostId) {
