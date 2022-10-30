@@ -25,12 +25,6 @@ public class MatchController {
                     .ok()
                     .body(matchService.getPagedMatchResultResponseDto(lostId, pageable));
     }
-
-    @GetMapping("/test")
-    public ResponseEntity<MatchResponseDto> getMachResultTest(@RequestParam Long lostId) {
-        return ResponseEntity.ok().body(matchService.getMatchResponseDto(lostId));
-    }
-
     @GetMapping("/auto")
     public void startScheduler() throws URISyntaxException {
         matchService.searchAllLosts();
