@@ -57,19 +57,19 @@ public class OauthController {
 
     @GetMapping("/mail/{lostid}")
     public void testMail(@PathVariable(name = "lostid") String lostId){
-        Lost lost= lostRepository.findById(11L).orElse(null);
-        List<Rescue> rescue1 = rescueRepository.findByDesertionNo(442420202200699L);
-        List<Rescue> rescue2 = rescueRepository.findByDesertionNo(447516202200236L);
-        List<Rescue> rescue3 = rescueRepository.findByDesertionNo(441374202201186L);
+        Lost lost= lostRepository.findById(7L).orElse(null);
+        List<Rescue> rescue1 = rescueRepository.findByDesertionNo(411300202200427L);
+        List<Rescue> rescue2 = rescueRepository.findByDesertionNo(411302202200614L);
+        List<Rescue> rescue3 = rescueRepository.findByDesertionNo(411302202200615L);
         Context context = new Context();
         context.setVariable("lost", lost);
         context.setVariable("rescue1", rescue1.get(0));
         context.setVariable("rescue2", rescue2.get(0));
         context.setVariable("rescue3", rescue3.get(0));
-            String message = templateEngine.process("mail/emails", context);
+            String message = templateEngine.process("mail/newEmail", context);
             System.out.println(message);
             EmailMessage emailMessage = EmailMessage.builder()
-                    .to("jhdl0157@naver.com")
+                    .to("cofla1312@gmail.com")
                     .subject("[멍타주] 매칭 결과가 나왔어요")
                     .message(message)
                     .build();
