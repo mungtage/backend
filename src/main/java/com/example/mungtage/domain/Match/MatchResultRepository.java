@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public interface MatchResultRepository extends JpaRepository<MatchResult, Long> {
     List<MatchResult> findByLostId(Long lostId, Pageable pageable);
-    Page<MatchResult> findByLostIdOrderByUpdatedDateDesc(Long lostId, Pageable pageable);
+    Page<MatchResult> findByLostIdOrderByUpdatedDateAsc(Long lostId, Pageable pageable);
 
 
 

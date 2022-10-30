@@ -93,7 +93,7 @@ public class MatchService {
 
     public MatchResponseDto getPagedMatchResultResponseDto(Long lostId, Pageable pageable) throws BadRequestException {
         try {
-            Page<MatchResult> matchResultPage = matchResultRepository.findByLostIdOrderByUpdatedDateDesc(lostId, pageable);
+            Page<MatchResult> matchResultPage = matchResultRepository.findByLostIdOrderByUpdatedDateAsc(lostId, pageable);
             List<MatchResultDto> matchResults = matchResultPage
                     .stream()
                     .map(s -> MatchResultDto.from(s))
