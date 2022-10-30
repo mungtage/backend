@@ -139,7 +139,9 @@ public class MatchService {
 
     public void searchAllLosts() throws URISyntaxException {
         List<Lost> findAllLosts=lostRepository.findAll();
+        log.info("Lost의 갯수 : {}",findAllLosts.size());
         for(Lost lost:findAllLosts){
+            log.info("Lost id = {} 가 Ai서버에 요청을 시작했습니다",lost.getId());
             backToAiServerAndEmailSend(lost);
         }
     }
