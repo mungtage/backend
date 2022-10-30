@@ -4,8 +4,11 @@ import com.example.mungtage.config.oauth.GetSocialOAuthRes;
 import com.example.mungtage.config.oauth.GoogleUser;
 import com.example.mungtage.config.oauth.oAuthService;
 import com.example.mungtage.domain.Lost.LostRepository;
+import com.example.mungtage.domain.Lost.LostService;
 import com.example.mungtage.domain.Lost.dto.LostResponseDto;
 import com.example.mungtage.domain.Lost.model.Lost;
+import com.example.mungtage.domain.Match.MatchResultRepository;
+import com.example.mungtage.domain.Match.model.MatchResult;
 import com.example.mungtage.domain.Rescue.RescueRepository;
 import com.example.mungtage.domain.Rescue.model.Rescue;
 import com.example.mungtage.domain.User.dto.GoogleResponseDto;
@@ -16,6 +19,7 @@ import com.example.mungtage.util.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -34,6 +38,8 @@ public class OauthController {
     private final EmailService emailService;
     private final LostRepository lostRepository;
     private final RescueRepository rescueRepository;
+    private final MatchResultRepository matchResultRepository;
+    private final LostService lostService;
     @PostMapping("")
     public ResponseEntity<GoogleResponseDto> getGoogleUserInfo(@RequestBody @Valid UrlRequest urlRequest) throws IOException {
         System.out.println(">> 소셜 로그인 API 서버로부터 받은 code :"+ urlRequest.getCode());

@@ -3,6 +3,7 @@ package com.example.mungtage.config.oauth;
 import com.example.mungtage.domain.User.UserRepository;
 import com.example.mungtage.domain.User.model.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthFilter extends GenericFilterBean {
     private final TokenService tokenService;
     private final UserRepository userRepository;
@@ -36,6 +38,9 @@ public class JwtAuthFilter extends GenericFilterBean {
 
             Authentication auth = getAuthentication(userDto);
             SecurityContextHolder.getContext().setAuthentication(auth);
+        }
+        else{
+            log.info("헤더에 토큰이 없습니다.");
         }
 
         chain.doFilter(request, response);
