@@ -13,7 +13,7 @@ public class RescueService {
     private final RescueRepository rescueRepository;
 
     public RescueDto getRescue(Long desertionNo) throws EntityNotFoundException {
-        Rescue rescue = rescueRepository.findById(desertionNo).get();
+        Rescue rescue = rescueRepository.findById(desertionNo).orElseThrow(EntityNotFoundException::new);
         return RescueDto.from(rescue);
     }
 }
