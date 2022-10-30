@@ -3,6 +3,7 @@ package com.example.mungtage.domain.Lost;
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.example.mungtage.domain.Lost.dto.CreateLostRequestDto;
 import com.example.mungtage.domain.Lost.model.Lost;
+import com.example.mungtage.domain.Match.MatchResultRepository;
 import com.example.mungtage.domain.User.UserRepository;
 import com.example.mungtage.domain.User.model.User;
 import com.example.mungtage.util.exception.BadRequestException;
@@ -19,6 +20,7 @@ import java.util.List;
 public class LostService {
     private final LostRepository lostRepository;
     private final UserRepository userRepository;
+    private final MatchResultRepository matchResultRepository;
 
     @Transactional
     public Lost createLost(CreateLostRequestDto request,String userEmail) {
@@ -52,5 +54,10 @@ public class LostService {
             throw new BadRequestException("삭제하지 못했습니다.");
         }
 
+    }
+    @Transactional
+    public void deletId() {
+        Lost lost=lostRepository.findById(1L).orElse(null);
+        matchResultRepository.deleteByLostId(lost.getId());
     }
 }

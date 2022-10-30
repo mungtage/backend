@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -35,6 +36,7 @@ import static org.springframework.data.domain.Sort.Order.asc;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class MatchService {
     private final ObjectMapper objectMapper;
     private final MatchResultRepository matchResultRepository;
@@ -123,8 +125,9 @@ public class MatchService {
         return MatchResponseDto.from(lostId, withRescue);
     }
     @Async
-    public void test(Lost lost) throws URISyntaxException {
+    public void backToAiServerAndEmailSend(Lost lost) throws URISyntaxException {
         Map<String, String> AIResponse = requestToAIServer(lost.getImage(), lost.getHappenDate().toString().replace("-", ""));
+        matchResultRepository.deleteByLostId(lost.getId());
         Boolean isWellCreated = createMatchResults(lost, new ArrayList<>(AIResponse.values()));
         if (!isWellCreated) {
             throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
@@ -134,22 +137,10 @@ public class MatchService {
     }
 
 
-    public void searchAllLosts() {
+    public void searchAllLosts() throws URISyntaxException {
         List<Lost> findAllLosts=lostRepository.findAll();
-        findAllLosts.stream()
-                .filter(lost -> !lost.getImage().isEmpty())
-                .forEach( lost -> {
-                            try {
-                                Map<String,String> aiResponse=requestToAIServer(lost.getImage(), lost.getHappenDate().toString());
-                                Boolean result = createMatchResults(lost, new ArrayList<>(aiResponse.values()));
-                                if (!result) {
-                                    throw new BadRequestException("이미지 매칭 결과를 저장하지 못했습니다.");
-                                }
-                                // 메일로 보내는 로직 작성
-                            } catch (URISyntaxException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                );
+        for(Lost lost:findAllLosts){
+            backToAiServerAndEmailSend(lost);
+        }
     }
 }

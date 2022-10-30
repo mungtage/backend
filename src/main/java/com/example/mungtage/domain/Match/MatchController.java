@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URISyntaxException;
+
 @RestController
 @RequestMapping("/api/v1/match")
 @RequiredArgsConstructor
@@ -29,8 +31,8 @@ public class MatchController {
         return ResponseEntity.ok().body(matchService.getMatchResponseDto(lostId));
     }
 
-//    @GetMapping("/auto")
-//    public void startScheduler(){
-//        matchService.searchAllLosts();
-//    }
+    @GetMapping("/auto")
+    public void startScheduler() throws URISyntaxException {
+        matchService.searchAllLosts();
+    }
 }

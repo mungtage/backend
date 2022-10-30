@@ -1,4 +1,13 @@
 spring:
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: 'update'
+    properties:
+      hibernate.format_sql: true
+      hibernate:
+        default_batch_fetch_size: 1000
   security:
     oauth2:
       client:
@@ -11,15 +20,6 @@ spring:
               - email
   main:
     allow-bean-definition-overriding: true
-  jpa:
-    open-in-view: false
-    show-sql: true
-    hibernate:
-      ddl-auto: 'update'
-    properties:
-      hibernate.format_sql: true
-      hibernate:
-        default_batch_fetch_size: 1000
   datasource:
     primary:
       driver-class-name: org.mariadb.jdbc.Driver
