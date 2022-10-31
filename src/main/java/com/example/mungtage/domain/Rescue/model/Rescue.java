@@ -1,10 +1,7 @@
 package com.example.mungtage.domain.Rescue.model;
 
 import com.example.mungtage.util.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,7 +11,9 @@ import javax.persistence.Table;
 @Setter
 @Entity
 @Table(name = "animal_info")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Builder
+@AllArgsConstructor
 public class Rescue extends BaseEntity {
     @Id
     private Long desertionNo;

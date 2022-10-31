@@ -101,6 +101,7 @@ public class MatchService {
             List<MatchResultWithRescueDto> withRescue = new ArrayList<>();
             for (MatchResultDto matchResult : matchResults) {
                 RescueDto rescue = rescueService.getRescue(matchResult.getDesertionNo());
+                System.out.println(rescue);
                 MatchResultWithRescueDto matchResultWithRescueDto =
                         MatchResultWithRescueDto.from(matchResult, rescue);
                 withRescue.add(matchResultWithRescueDto);
