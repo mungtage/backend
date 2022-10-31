@@ -69,7 +69,7 @@ public class OauthController {
             String message = templateEngine.process("mail/newEmail", context);
             System.out.println(message);
             EmailMessage emailMessage = EmailMessage.builder()
-                    .to("cofla1312@gmail.com")
+                    .to("jhdl01575@gmail.com")
                     .subject("[멍타주] 매칭 결과가 나왔어요")
                     .message(message)
                     .build();
