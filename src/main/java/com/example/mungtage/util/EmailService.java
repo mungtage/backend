@@ -45,7 +45,7 @@ public class EmailService {
         context.setVariable("MatchResultWithRescueDto1", rescueList.get(0));
         context.setVariable("MatchResultWithRescueDto2", rescueList.get(1));
         context.setVariable("MatchResultWithRescueDto3", rescueList.get(2));
-        String message = templateEngine.process("mail/newEmail", context);
+        String message = templateEngine.process("mail/email", context);
         System.out.println(message);
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(lost.getUser().getEmail())
