@@ -2,6 +2,7 @@ package com.example.mungtage.config.oauth;
 
 import com.example.mungtage.domain.User.UserRepository;
 import com.example.mungtage.domain.User.model.User;
+import com.example.mungtage.util.exception.AccessTokenException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
@@ -12,41 +13,45 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Slf4j
-public class JwtAuthFilter extends GenericFilterBean {
+public class JwtAuthFilter extends OncePerRequestFilter {
     private final TokenService tokenService;
     private final UserRepository userRepository;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String token = ((HttpServletRequest)request).getHeader("Auth");
-        if (token != null && tokenService.verifyToken(token)) {
-            String email = tokenService.getUid(token);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("Token Check Filter..........................");
+        try{
+            String path = request.getRequestURI();
+            if (path.startsWith("/api/v1/oauth")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+            String email = validateAccessToken(request);
+            log.info("email: " + email);
             User user=userRepository.findByEmail(email).orElse(null);
-
             UserDto userDto = UserDto.builder()
                     .email(email)
                     .name(user.getName())
                     .build();
-
             Authentication auth = getAuthentication(userDto);
             SecurityContextHolder.getContext().setAuthentication(auth);
+            filterChain.doFilter(request,response);
+        }catch(AccessTokenException accessTokenException){
+            accessTokenException.sendResponseError(response);
         }
-        else{
-            log.info("헤더에 토큰이 없습니다.");
-        }
-
-        chain.doFilter(request, response);
     }
 
     public Authentication getAuthentication(UserDto member) {

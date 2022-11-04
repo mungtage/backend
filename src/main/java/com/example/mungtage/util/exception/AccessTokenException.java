@@ -1,5 +1,6 @@
 package com.example.mungtage.util.exception;
 
+import com.google.gson.Gson;
 import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
