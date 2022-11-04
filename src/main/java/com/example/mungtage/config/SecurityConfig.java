@@ -8,6 +8,7 @@ import com.example.mungtage.domain.User.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,7 +38,7 @@ public class SecurityConfig {
     }
 
 //    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
+//    protected void (HttpSecurity http) throws Exception {
 //        http.httpBasic().disable()
 //                .cors().configurationSource(corsConfigurationSource())
 //                .and()
@@ -67,6 +68,7 @@ public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
             )
             .authorizeRequests(
                     authorizeRequests -> authorizeRequests
+                            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                             .antMatchers("/oauth2/authorization/**","/api/v1/oauth/**","/api/v1/match/auto").permitAll()
                             .anyRequest()
                             .authenticated() // 최소자격 : 로그인
