@@ -15,16 +15,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@Configuration
-@RequiredArgsConstructor
 @EnableWebSecurity
+@RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
 
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
@@ -36,39 +36,67 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().disable()
-                .cors().configurationSource(corsConfigurationSource())
-                .and()
-                .csrf().disable().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/token/**", "/oauth2/authorization/**","/api/v1/oauth/**","/api/v1/match/auto").permitAll()
-                .anyRequest().authenticated();
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.httpBasic().disable()
+//                .cors().configurationSource(corsConfigurationSource())
+//                .and()
+//                .csrf().disable().sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/oauth2/authorization/**","/api/v1/oauth/**","/api/v1/match/auto").permitAll()
+//                .anyRequest().authenticated();
+//
+//        http.formLogin().disable()
+//                .oauth2Login()
+//                .userInfoEndpoint()
+//                .userService(customOAuth2UserService)
+//                .and()
+//                .successHandler(oAuth2SuccessHandler);
+//
+//        http.addFilterBefore(new JwtAuthFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
+//    }
+@Bean
+public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+    http
+            .httpBasic().disable()
+            .csrf().disable()
+            .cors(cors -> cors
+                    .configurationSource(corsConfigurationSource())
+            )
+            .authorizeRequests(
+                    authorizeRequests -> authorizeRequests
+                            .antMatchers("/oauth2/authorization/**","/api/v1/oauth/**","/api/v1/match/auto").permitAll()
+                            .anyRequest()
+                            .authenticated() // 최소자격 : 로그인
+            )
+            .sessionManagement(sessionManagement -> sessionManagement
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .formLogin().disable()
+            .oauth2Login(oauth -> oauth.userInfoEndpoint()
+                    .userService(customOAuth2UserService)
+                    .and()
+                    .successHandler(oAuth2SuccessHandler))
+            .addFilterBefore(
+                    new JwtAuthFilter(tokenService, userRepository),
+                    UsernamePasswordAuthenticationFilter.class
+            )
+            .logout().disable();
 
-        http.formLogin().disable()
-                .oauth2Login()
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService)
-                .and()
-                .successHandler(oAuth2SuccessHandler);
-
-        http.addFilterBefore(new JwtAuthFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
-    }
+    return http.build();
+}
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.addExposedHeader("Auth");
-        configuration.setAllowCredentials(true);
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/v1/**", configuration);
-        return source;
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/api/**", corsConfiguration);
+        return urlBasedCorsConfigurationSource;
     }
 }
