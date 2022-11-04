@@ -2,6 +2,9 @@ package com.example.mungtage.config.oauth;
 
 import com.example.mungtage.domain.User.UserRepository;
 import com.example.mungtage.domain.User.model.User;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -49,5 +52,38 @@ public class JwtAuthFilter extends GenericFilterBean {
     public Authentication getAuthentication(UserDto member) {
         return new UsernamePasswordAuthenticationToken(member.getEmail(), "",
                 Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
+    }
+
+    private String validateAccessToken(HttpServletRequest request) throws AccessTokenException {
+
+        String headerStr = request.getHeader("Authorization");
+
+        if(headerStr == null  || headerStr.length() < 8){
+            throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.UNACCEPT);
+        }
+
+        //Bearer 생략
+        String tokenType = headerStr.substring(0,6);
+        String tokenStr =  headerStr.substring(7);
+
+        if(tokenType.equalsIgnoreCase("Bearer") == false){
+            throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.BADTYPE);
+        }
+
+        try{
+            //Map<String, Object> values = jwtUtil.validateToken(tokenStr);
+            String email=tokenService.getUid(tokenStr);
+
+            return email;
+        }catch(MalformedJwtException malformedJwtException){
+            log.error("MalformedJwtException----------------------");
+            throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.MALFORM);
+        }catch(SignatureException signatureException){
+            log.error("SignatureException----------------------");
+            throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.BADSIGN);
+        }catch(ExpiredJwtException expiredJwtException){
+            log.error("ExpiredJwtException----------------------");
+            throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.EXPIRED);
+        }
     }
 }
