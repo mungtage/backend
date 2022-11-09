@@ -95,7 +95,7 @@ public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("https://mungtage.site/"));
+        configuration.setAllowedOriginPatterns(List.of("https://mungtage.site/","*"));
         configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);
